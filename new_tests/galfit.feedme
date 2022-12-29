@@ -8,7 +8,7 @@
 A) data/test_g.fits,data/test_r.fits,data/test_i.fits # Input data image (FITS file)
 A1) g,r,i			       #nick names (band labels) 
 A2) 4770,6231,7625    # effective wavelenghts
-B) ../outputs/data/test_ss.fits       # Output data image block
+B) outputs/data/test_ss.fits       # Output data image block
 C) none  # Sigma image name (made from data if blank or "none") 
 D) psf_data/test_g.fits,psf_data/test_r.fits,psf_data/test_i.fits # Input PSF image and (optional) diffusion kernel
 E) 1                   # PSF fine sampling factor relative to data 
