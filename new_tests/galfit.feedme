@@ -12,12 +12,12 @@ B) outputs/data/test_ss.fits       # Output data image block
 C) none  # Sigma image name (made from data if blank or "none") 
 D) psf_data/test_g.fits,psf_data/test_r.fits,psf_data/test_i.fits # Input PSF image and (optional) diffusion kernel
 E) 1                   # PSF fine sampling factor relative to data 
-F) none                # Bad pixel mask (FITS image or ASCII coord list)
+F) none                # Bad pixel mask (FITS image or ASCII coord list) 
 G) none                # File with parameter constraints (ASCII file) 
 H) 1    200  1  200  # Image region to fit (xmin xmax ymin ymax)
 I) 200  200            # Size of the convolution box (x y)
-J) 25.11,24.80,24.36   # Magnitude photometric zeropoint 
-K) 0.396  0.396        # Plate scale (dx dy)   [arcsec per pixel]
+J) 25.11,24.80,24.36   # Magnitude photometric zeropoint
+K) 0.55  0.55        # Plate scale (dx dy)   [arcsec per pixel]
 O) regular             # Display type (regular, curses, both)
 P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
 U) 0
@@ -72,4 +72,3 @@ U) 0
 # Z) 0                                 #  Skip this model in output image?  (yes=1, no=0)
 
 ================================================================================
-
