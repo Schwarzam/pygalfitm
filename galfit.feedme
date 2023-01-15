@@ -1,0 +1,16 @@
+A) 012                             # Input data image (FITS file)
+A1) g, r, i                         # Nick names (band labels) 
+A2) 4770, 6231, 7625                # Effective wavelenghts
+B) 4770, 6231, 7625                # Output data image block
+C)                                 # Sigma image name (made from data if blank or 'none')
+D)                                 # Input PSF image and (optional) diffusion kernel
+E) 1                               # PSF fine sampling factor relative to data 
+F) none                            # Bad pixel mask (FITS image or ASCII coord list)
+G) none                            # File with parameter constraints (ASCII file) 
+H) 1    200  1  200                # Image region to fit (xmin xmax ymin ymax)
+I) 200  200                        # Size of the convolution box (x y)
+J) 25.11,24.80,24.36               # Magnitude photometric zeropoint
+K) 0.55  0.55                      # Plate scale (dx dy)   [arcsec per pixel]
+O) regular                         # Display type (regular, curses, both)
+P) 0                               # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
+U) 0                               # 
