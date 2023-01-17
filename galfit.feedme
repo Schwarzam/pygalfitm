@@ -14,3 +14,26 @@ K) 0.55  0.55                      # Plate scale (dx dy)   [arcsec per pixel]
 O) regular                         # Display type (regular, curses, both)
 P) 0                               # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
 U) 0                               # 
+
+
+
+0) sersic
+1) 200.0,200.0,200.0                   1    band       Position x [pixel]
+2) 200.0,200.0,200.0                   1    band       Position y [pixel]
+3) 23.03,22.30,22.22                   3    band       Integrated magnitude
+4) 10,10,10                            2    band       R_e (effective radius) [pix]
+5) 1.5,1.5,1.5                         2    band       Sersic index n (de Vaucouleurs n=4)
+9) 0.5,0.5,0.5                         1    band       Axis ratio (b/a)
+10) 0,0,0                               1    band       Position angle (PA) [deg: Up=0, Left=90]
+Z) 0                                                   Skip this model in output image? (yes=1, no=0)
+
+
+
+0) expdisk
+1) 300                                 1    band       Position x [pixel]
+2) 357.4                               1    band       Position y [pixel]
+3) 23.03,22.30,22.22                   3    band       Integrated magnitude
+4) 10,10,10                            2    band       R_s (disk scale lengths) [pix]
+9) 0.5,0.5,0.5                         1    band       Axis ratio (b/a)
+10) 0,0,0                               1    band       Position angle (PA) [deg: Up=0, Left=90]
+Z) 0                                                   Skip this model in output image? (yes=1, no=0)
