@@ -1,11 +1,11 @@
-def get_sersic_splus(ra, dec):
+def get_sersic_splus(conn, ra, dec, bands = ['R', 'I', 'G']):
     
     lb_a : str = ""
     leffective_r : str = ""
     lpa : str = ""
     lmagnitude : str = ""
 
-    for band in ['R', 'I', 'G']:
+    for band in bands:
         band = band.lower()
 
         table = conn.query(f"""

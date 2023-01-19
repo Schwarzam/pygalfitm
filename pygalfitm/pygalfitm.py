@@ -110,12 +110,16 @@ class PyGalfitm:
                 raise Exception(f"Not valid component - {comp}")
 
 
-    def set_base(self, item, value):
-        if item in self.base:
-            self.base[item]["value"] = value
+    def set_base(self, item, value=""):
+        if isinstance(item, dict):
+            for i in item:
+                self.base[i]["value"] = item[i]
         else:
-            raise KeyError("Parameter not found in galfitm feedme base config.")
-    
+            if item in self.base:
+                self.base[item]["value"] = value
+            else:
+                raise KeyError("Parameter not found in galfitm feedme base config.")
+        
     def set_component(self, component, item, value, column = 1):
         if column in [1, 2, 3]:
             column = 'col' + str(column)
@@ -144,6 +148,11 @@ class PyGalfitm:
                 print(final)
         else:
             raise KeyError("Component not found.")
+    
+    def print_base(self):
+        for param in self.base:
+            final = str(param) + ") " + str(self.base[param]["value"]).ljust(32) + "# " + str(self.base[param]["comment"])
+            print(final)
 
 
     def write_base(self, feedme_path = None):
