@@ -5,6 +5,7 @@ import os
 class PyGalfitm:
     def __init__(self):
         self.feedme_path = "galfit.feedme"
+        self.executable = "./new_tests/galfitm-1.4.4-osx"
 
         self.base = {
             "A": {"value": "", "comment": "Input data image (FITS file)"},
@@ -104,10 +105,10 @@ class PyGalfitm:
                     raise Exception(f"Not valid component - {comp}")
         else:
             if component_s in self.components:
-                if component_s not in self.activate_components:
+                if component_s not in self.active_components:
                     self.active_components.append(component_s)
             else:
-                raise Exception(f"Not valid component - {comp}")
+                raise Exception(f"Not valid component - {component_s}")
 
 
     def set_base(self, item, value=""):
@@ -144,14 +145,14 @@ class PyGalfitm:
         config = self.components_config[component]
         if component in self.components_config:
             for i in self.components_config[component]:
-                final = i + ") " + config[i]['col1'].ljust(35) + " " + config[i]['col2'].ljust(5) + config[i]['col3'].ljust(10) + " " + config[i]['comment']
+                final = i + ") " + config[i]['col1'].ljust(35) + " " + config[i]['col2'].ljust(5) + config[i]['col3'].ljust(10) + " # " + config[i]['comment']
                 print(final)
         else:
             raise KeyError("Component not found.")
     
     def print_base(self):
         for param in self.base:
-            final = str(param) + ") " + str(self.base[param]["value"]).ljust(32) + "# " + str(self.base[param]["comment"])
+            final = str(param) + ") " + str(self.base[param]["value"]).ljust(32) + " # " + str(self.base[param]["comment"])
             print(final)
 
 
@@ -160,7 +161,7 @@ class PyGalfitm:
             feedme_path = self.feedme_path
         file = open(feedme_path, "w")
         for param in self.base:
-            final = str(param) + ") " + str(self.base[param]["value"]).ljust(32) + "# " + str(self.base[param]["comment"]) + "\n"
+            final = str(param) + ") " + str(self.base[param]["value"]).ljust(32) + " # " + str(self.base[param]["comment"]) + "\n"
             file.write(final)
         file.close()
     
@@ -175,9 +176,10 @@ class PyGalfitm:
 
             f.write("0) " + component_name + "\n")
             for i in self.components_config[component_name]:
-                final = i + ") " + config[i]['col1'].ljust(35) + " " + config[i]['col2'].ljust(5) + config[i]['col3'].ljust(10) + " " + config[i]['comment'] + "\n"
+                final = i + ") " + config[i]['col1'].ljust(35) + " " + config[i]['col2'].ljust(5) + config[i]['col3'].ljust(10) + " # " + config[i]['comment'] + "\n"
                 f.write(final)
 
             f.close()
     
-    
+    def run(self):
+        os.system(f'{self.executable} {self.feedme_path}')

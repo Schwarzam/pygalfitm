@@ -1,5 +1,23 @@
 from astropy.io import fits
 
+def unpack_file(filename, output=None, output_folder=None, delete_compressed = False):
+    import os
+    """
+    Funpack (uncompress) .fz file
+    """
+
+    if output_folder:
+        output = os.path.join(output_folder, filename.replace('.fz', ''))
+    elif not output:
+        output = filename.replace('.fz', '')
+        
+    if delete_compressed:
+        os.remove(filename)
+    
+    packed = fits.open(filename)
+    unpacked = fits.hdu.image.PrimaryHDU(data = packed[1].data, header = packed[1].header)
+    fits.hdu.hdulist.HDUList(hdus=[unpacked]).writeto(output, overwrite=True)
+
 def string_times_x(string, x):
     res = ""
     for i in range(x): ## Use lambda instead

@@ -1,80 +1,28 @@
-A) 012                             # Input data image (FITS file)
-A1) g, r, i                         # Nick names (band labels) 
-A2) 4770, 6231, 7625                # Effective wavelenghts
-B) 4770, 6231, 7625                # Output data image block
-C)                                 # Sigma image name (made from data if blank or 'none')
-D)                                 # Input PSF image and (optional) diffusion kernel
-E) 1                               # PSF fine sampling factor relative to data 
-F) none                            # Bad pixel mask (FITS image or ASCII coord list)
-G) none                            # File with parameter constraints (ASCII file) 
-H) 1    200  1  200                # Image region to fit (xmin xmax ymin ymax)
-I) 200  200                        # Size of the convolution box (x y)
-J) 0,0,0                           # Magnitude photometric zeropoint
-K) 0.55  0.55                      # Plate scale (dx dy)   [arcsec per pixel]
-O) regular                         # Display type (regular, curses, both)
-P) 0                               # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
-U) 0                               # 
+A) data/ari_test_i.fits,data/ari_test_r.fits,data/ari_test_g.fits # Input data image (FITS file)
+A1) i,r,g                            # Nick names (band labels) 
+A2) 7625,6231,4770                   # Effective wavelenghts
+B) outputs/ari_testss.fits          # Output data image block
+C) none                             # Sigma image name (made from data if blank or 'none')
+D) data/psf_ari_test_i.fits,data/psf_ari_test_r.fits,data/psf_ari_test_g.fits # Input PSF image and (optional) diffusion kernel
+E) 1                                # PSF fine sampling factor relative to data 
+F) none                             # Bad pixel mask (FITS image or ASCII coord list)
+G) none                             # File with parameter constraints (ASCII file) 
+H) 1   200  1   200                 # Image region to fit (xmin xmax ymin ymax)
+I) 200 200                          # Size of the convolution box (x y)
+J) 23.344,23.535,23.49              # Magnitude photometric zeropoint
+K) 0.55 0.55                        # Plate scale (dx dy)   [arcsec per pixel]
+O) regular                          # Display type (regular, curses, both)
+P) 0                                # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
+U) 0                                # 
 
 
 
 0) sersic
-1) 200.0,200.0,200.0                   1    band       Position x [pixel]
-2) 200.0,200.0,200.0                   1    band       Position y [pixel]
-3) 0,0,0                               3    band       Integrated magnitude
-4) 0,0,0                               2    band       R_e (effective radius) [pix]
-5) 0,0,0                               2    band       Sersic index n (de Vaucouleurs n=4)
-9) 0,0,0                               1    band       Axis ratio (b/a)
-10) 0,0,0                               1    band       Position angle (PA) [deg: Up=0, Left=90]
-Z) 0                                                   Skip this model in output image? (yes=1, no=0)
-
-
-
-0) expdisk
-1) 300                                 1    band       Position x [pixel]
-2) 357.4                               1    band       Position y [pixel]
-3) 0,0,0                               3    band       Integrated magnitude
-4) 0,0,0                               2    band       R_s (disk scale lengths) [pix]
-9) 0,0,0                               1    band       Axis ratio (b/a)
-10) 0,0,0                               1    band       Position angle (PA) [deg: Up=0, Left=90]
-Z) 0                                                   Skip this model in output image? (yes=1, no=0)
-
-
-
-0) moffat
-1) 300                                 1    band       Position x [pixel]
-2) 357.4                               1    band       Position y [pixel]
-3) 0,0,0                               3    band       Total magnitude
-4) 0,0,0                               2    band       FWHM
-5) 0,0,0                               2    band       powerlaw
-9) 0,0,0                               1    band       Axis ratio (b/a)
-10) 0,0,0                               1    band       Position angle (PA) [deg: Up=0, Left=90]
-Z) 0                                                   Skip this model in output image? (yes=1, no=0)
-
-
-
-0) ferrer
-1) 300                                 1    band       Position x [pixel]
-2) 357.4                               1    band       Position y [pixel]
-3) 0,0,0                               3    band       Central surface brghtness [mag/arcsec^2]
-4) 0,0,0                               2    band       Outer truncation radius  [pix]
-5) 0,0,0                               2    band       Alpha (outer truncation sharpness) 
-6) 0,0,0                               2    band       Beta (central slope)
-9) 0,0,0                               1    band       Axis ratio (b/a)
-10) 0,0,0                               1    band       Position angle (PA) [deg: Up=0, Left=90]
-Z) 0                                                   Skip this model in output image? (yes=1, no=0)
-
-
-
-0) psf
-1) 0,0,0                               0    band       position x [pixel]
-2) 0,0,0                               0    band       position y [pixel]
-3) 0,0,0                               0    band       total magnitude 
-Z) 0                                                   Skip this model in output image? (yes=1, no=0)
-
-
-
-0) sky
-1) BKGG,BKGR,BKGI                      0    band       Sky background at center of fitting region [ADUs]
-2) 0,0,0                               0    band       dsky/dx (sky gradient in x) [ADUs/pix]
-3) 0,0,0                               0    band       dsky/dy (sky gradient in y) [ADUs/pix]
-Z) 0                                                   Skip this model in output image? (yes=1, no=0)
+1) 100.0,100.0,100.0                   1    band       # Position x [pixel]
+2) 100.0,100.0,100.0                   1    band       # Position y [pixel]
+3) 14.022123,14.107952,14.922325       3    band       # Integrated magnitude
+4) 25.440218,30.087149,24.733025       2    band       # R_e (effective radius) [pix]
+5) 4,4,4                               2    band       # Sersic index n (de Vaucouleurs n=4)
+9) 0.6433851,0.7046503,0.7636552       1    band       # Axis ratio (b/a)
+10) 15.269562,23.058279,32.80171        1    band       # Position angle (PA) [deg: Up=0, Left=90]
+Z) 0                                                   # Skip this model in output image? (yes=1, no=0)
