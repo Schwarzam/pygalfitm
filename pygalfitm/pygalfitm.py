@@ -1,7 +1,5 @@
 import os
 
-import os
-
 class PyGalfitm:
     def __init__(self):
         self.feedme_path = "galfit.feedme"
@@ -182,4 +180,7 @@ class PyGalfitm:
             f.close()
     
     def run(self):
-        os.system(f'{self.executable} {self.feedme_path}')
+        import subprocess
+        output = subprocess.check_output(f'{self.executable} {self.feedme_path}', shell=True).decode("UTF-8")
+        
+        return output
