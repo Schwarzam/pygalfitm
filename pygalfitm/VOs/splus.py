@@ -9,7 +9,6 @@ import pandas as pd
 import os
 
 
-
 def get_splus(name, ra, dec, cut_size, data_folder, output_folder, conn, bands = ["I", "R", "G"], zpfile = None,
     SPLUS_WAVELENGHTS = {
             "i": 7670.59, 
@@ -26,6 +25,26 @@ def get_splus(name, ra, dec, cut_size, data_folder, output_folder, conn, bands =
             "J0861": 8607.59
     }, 
     **kwargs):
+    """Function to get splus data and process it with galfitm
+    You may copy this code and adapt it to your needs
+
+    Args:
+        name (str): file base name, this will be used in all files produced
+        ra (float): right ascension deg, center of image
+        dec (float): declination deg, center of image
+        cut_size (int): image size
+        data_folder (str): folder path to save downloaded images to process
+        output_folder (_type_): folder with galfitm outputs
+        conn (splusdata.connect): splusdata logged in connection
+        bands (list, optional): splus bands. Defaults to ["I", "R", "G"].
+        zpfile (str, optional): path to zeropoint file, if None it will automatically download it. Defaults to None.
+        SPLUS_WAVELENGHTS (dict, optional): SPLUS wavelenghts. Defaults to { "i": 7670.59, "r": 6251.83, "g": 4758.49, "z": 8936.64, "u": 3533.29, "J0378": 3773.13, "J0395": 3940.70, "J0410": 4095.27, "J0430": 4292.39, "J0515": 5133.15, "J0660": 6613.88, "J0861": 8607.59 }.
+    
+    Returns:
+        (str) : galfitm execution output in str
+    """    
+
+    
 
 
     ##Get wavelenghts, input_images, psf_images, filters, zps
@@ -129,3 +148,4 @@ def get_splus(name, ra, dec, cut_size, data_folder, output_folder, conn, bands =
 
     pyg.write_feedme()
     _ = pyg.run()
+    return _
