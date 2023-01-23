@@ -7,3 +7,9 @@ data/*
 outputs/*
 
 fit.log
+
+pygalfitm.egg-info
+dist 
+build
+
+dev/*/

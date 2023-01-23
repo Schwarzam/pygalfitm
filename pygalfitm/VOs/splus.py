@@ -35,3 +35,4 @@ def get_sersic_splus(conn, ra, dec, bands = ['R', 'I', 'G']):
     lmagnitude = lmagnitude[1:]
 
     return lb_a, leffective_r, lpa, lmagnitude
+
