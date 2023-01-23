@@ -111,7 +111,7 @@ class PyGalfitm:
             Exception: Not valid component
         """        
         if component_s is None:
-            self.activate_components = []
+            self.active_components = []
             return
         if isinstance(component_s, list):
             for comp in component_s:
