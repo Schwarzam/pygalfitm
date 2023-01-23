@@ -112,21 +112,32 @@ class PyGalfitm:
     def set_base(self, item, value=""):
         if isinstance(item, dict):
             for i in item:
-                self.base[i]["value"] = item[i]
+                self.base[i]["value"] = str(item[i])
         else:
             if item in self.base:
-                self.base[item]["value"] = value
+                self.base[item]["value"] = str(value)
             else:
                 raise KeyError("Parameter not found in galfitm feedme base config.")
         
-    def set_component(self, component, item, value, column = 1):
+    def set_component(self, component, item = None, value = None, column = 1):
         if column in [1, 2, 3]:
             column = 'col' + str(column)
         else:
             raise Exception("Column not valid.")
         if component in self.components_config:
-            if item in self.components_config[component]:
-                self.components_config[component][item][column] = value
+            
+            if isinstance(item, dict):
+                for i in item:
+                    if isinstance(item[i], tuple):
+                        if len(item[i]) > 3:
+                            raise Exception("Tuple not valid " + str(item[i]))
+                        for key, val in enumerate(item[i]):
+                            self.components_config[component][i]["col" + str(key + 1)] = str(val)
+                    else:
+                        self.components_config[component][i][column] = str(item[i])
+            else:
+                if item in self.components_config[component]:
+                    self.components_config[component][item][column] = str(value)
         else:
             raise KeyError("Component not found.")
 
