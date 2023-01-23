@@ -1,15 +1,15 @@
-A) data/ari_test_i.fits,data/ari_test_r.fits,data/ari_test_g.fits # Input data image (FITS file)
+A) data/ari_test2_i.fits,data/ari_test2_r.fits,data/ari_test2_g.fits # Input data image (FITS file)
 A1) i,r,g                            # Nick names (band labels) 
 A2) 7670.59,6251.83,4758.49          # Effective wavelenghts
-B) outputs/ari_testss.fits          # Output data image block
+B) outputs/ari_test2ss.fits         # Output data image block
 C) none                             # Sigma image name (made from data if blank or 'none')
-D) data/psf_ari_test_i.fits,data/psf_ari_test_r.fits,data/psf_ari_test_g.fits # Input PSF image and (optional) diffusion kernel
+D) data/psf_ari_test2_i.fits,data/psf_ari_test2_r.fits,data/psf_ari_test2_g.fits # Input PSF image and (optional) diffusion kernel
 E) 1                                # PSF fine sampling factor relative to data 
 F) none                             # Bad pixel mask (FITS image or ASCII coord list)
 G) none                             # File with parameter constraints (ASCII file) 
 H) 1   200  1   200                 # Image region to fit (xmin xmax ymin ymax)
 I) 200 200                          # Size of the convolution box (x y)
-J) 23.412,23.602,23.607             # Magnitude photometric zeropoint
+J) 23.344,23.535,23.49              # Magnitude photometric zeropoint
 K) 0.55 0.55                        # Plate scale (dx dy)   [arcsec per pixel]
 O) regular                          # Display type (regular, curses, both)
 P) 0                                # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps

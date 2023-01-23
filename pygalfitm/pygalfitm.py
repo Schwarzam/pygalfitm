@@ -1,9 +1,14 @@
 import os
+import sys
+
+import requests
+
+import pygalfitm
 
 class PyGalfitm:
     """PyGalfitM wrapper class. 
     """    
-    def __init__(self):
+    def __init__(self, executable = os.path.join(pygalfitm.__path__[0], "galfitm")):
         """Here we initialize the class with default values for the base and components. 
 
         Base values are in self.base variable 
@@ -11,7 +16,7 @@ class PyGalfitm:
         Components are stored in self.components_config
         """        
         self.feedme_path = "galfit.feedme"
-        self.executable = "./new_tests/galfitm-1.4.4-osx"
+        self.executable = executable
 
         self.base = {
             "A": {"value": "", "comment": "Input data image (FITS file)"},
@@ -98,6 +103,19 @@ class PyGalfitm:
 
         self.active_components = []
 
+    def check_executable(self):
+        if not os.path.exists(self.executable):
+            
+            if sys.platform == "darwin":
+                print("Downloading galfitm executable from " + "https://www.nottingham.ac.uk/astronomy/megamorph/exec/galfitm-1.4.4-osx")
+                r = requests.get("https://www.nottingham.ac.uk/astronomy/megamorph/exec/galfitm-1.4.4-osx")
+                open(os.path.join(pygalfitm.__path__[0], "galfitm"), "wb").write(r.content)
+                
+                print(f"""PLEASE RUN:
+                    chmod +x {os.path.join(pygalfitm.__path__[0], "galfitm")}
+                """)
+        
+                raise Exception(f"Run chmod +x {os.path.join(pygalfitm.__path__[0], 'galfitm')}")
 
     def activate_components(self, component_s = None):
         """This function is used to activate one or more components. 
@@ -288,6 +306,8 @@ class PyGalfitm:
             str: output of run.
         """        
         import subprocess
+
+        self.check_executable()
         output = subprocess.check_output(f'{self.executable} {self.feedme_path}', shell=True).decode("UTF-8")
         
         return output

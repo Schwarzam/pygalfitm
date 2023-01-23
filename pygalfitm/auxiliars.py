@@ -1,4 +1,7 @@
 from astropy.io import fits
+import requests
+import os
+import pygalfitm
 
 def unpack_file(filename, output=None, output_folder=None, delete_compressed = False):
     import os
@@ -39,3 +42,14 @@ def get_exptime(filename):
     ret = hdu.header["EXPTIME"]
     hdulist.close()
     return ret
+
+
+
+
+def check_vo_file(file, download_link):
+    if not os.path.exists(os.path.join(pygalfitm.__path__[0], f'{file}')):
+        print("Downloading " + file)
+        r = requests.get(download_link)
+        print("Writing " + os.path.join(pygalfitm.__path__[0], file))
+        open(os.path.join(pygalfitm.__path__[0], file), "wb").write(r.content)
+        print("Done!")

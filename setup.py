@@ -8,7 +8,7 @@ setuptools.setup(
      author_email="gustavo.b.schwarz@gmail.com",
      description="Python3 GalfitM wrapper",
      url="https://github.com/schwarzam/pygalfitm",
-     install_requires = ['astropy', 'pandas', 'numpy', 'splusdata'],
+     install_requires = ['astropy', 'pandas', 'numpy', 'requests'],
      classifiers=[
          "Programming Language :: Python :: 3",
          "License :: OSI Approved :: Apache Software License"
