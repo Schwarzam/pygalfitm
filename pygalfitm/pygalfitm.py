@@ -1,7 +1,15 @@
 import os
 
 class PyGalfitm:
+    """PyGalfitM wrapper class. 
+    """    
     def __init__(self):
+        """Here we initialize the class with default values for the base and components. 
+
+        Base values are in self.base variable 
+
+        Components are stored in self.components_config
+        """        
         self.feedme_path = "galfit.feedme"
         self.executable = "./new_tests/galfitm-1.4.4-osx"
 
@@ -92,8 +100,19 @@ class PyGalfitm:
 
 
     def activate_components(self, component_s = None):
+        """This function is used to activate one or more components. 
+        You may pass just a string with the component name, or a list. 
+
+        If left in blank, the active components are reseted. 
+        Args:
+            component_s (list or str, optional): Component name or list. Defaults to None.
+
+        Raises:
+            Exception: Not valid component
+        """        
         if component_s is None:
             self.activate_components = []
+            return
         if isinstance(component_s, list):
             for comp in component_s:
                 if comp in self.components:
@@ -110,6 +129,26 @@ class PyGalfitm:
 
 
     def set_base(self, item, value=""):
+        """Function used to alter base values. 
+        It's possible to pass only one value by giving the item and value to alter, or a dict with all keys and respective values.
+
+        Ex:
+            p.set_base("A1", "X")
+            p.set_base("B", "Y")
+
+            p.set_base({
+                "A1": X
+                "B": Y
+                "C": Z
+            })
+
+        Args:
+            item (str or dict): str of item name, or dict with infos.
+            value (str, optional): value referred to item name. Defaults to "".
+
+        Raises:
+            KeyError: Parameter not valid
+        """        
         if isinstance(item, dict):
             for i in item:
                 self.base[i]["value"] = str(item[i])
@@ -119,7 +158,41 @@ class PyGalfitm:
             else:
                 raise KeyError("Parameter not found in galfitm feedme base config.")
         
-    def set_component(self, component, item = None, value = None, column = 1):
+    def set_component(self, component, item, value = None, column = 1):
+        """Function used to alter component values
+        It's possible to pass only one value by giving the item and value to alter, or a dict with all keys and respective values.
+
+        Ex:
+            p.set_component("sersic", "1", "X", column=1)
+            p.set_component("sersic", "1", "band", column=3)
+
+            p.set_component("sersic", "2", "Y")
+            
+                OR
+
+            p.set_component("sersic", {
+                "A1": X
+                "B": Y
+                "C": Z
+            })
+
+                OR
+            
+            p.set_component("sersic", {
+                "A1": (X, 1, band)
+                "B": (Y, 1, band)
+                "C": Z
+            })
+
+        Args:
+            component (str): component name
+            item (str or dict): item to change or dict with all infos. 
+            value (str): Value referred in item (just used in case item is str).
+            column (int, optional): Select column of change, 1, 2 or 3. Defaults to 1.
+
+        Raises:
+            Exception: Component not found.
+        """        
         if column in [1, 2, 3]:
             column = 'col' + str(column)
         else:
@@ -143,14 +216,30 @@ class PyGalfitm:
 
 
     def write_feedme(self, feedme_path = None):
+        """Writes final feedme
+
+        Args:
+            feedme_path (str, optional): file path, if none select default file path. Defaults to None.
+        """        
         if feedme_path is None:
             feedme_path = self.feedme_path
+        else:
+            self.feedme_path = feedme_path
+
         self.write_base(feedme_path)
 
         for component in self.active_components:
             self.write_component(component, feedme_path)
     
     def print_component(self, component):
+        """Prints selected component to visualize informations
+
+        Args:
+            component (str): component name
+
+        Raises:
+            KeyError: Component not found.
+        """        
         config = self.components_config[component]
         if component in self.components_config:
             for i in self.components_config[component]:
@@ -160,6 +249,8 @@ class PyGalfitm:
             raise KeyError("Component not found.")
     
     def print_base(self):
+        """Prints base params to visualize informations
+        """        
         for param in self.base:
             final = str(param) + ") " + str(self.base[param]["value"]).ljust(32) + " # " + str(self.base[param]["comment"])
             print(final)
@@ -191,6 +282,11 @@ class PyGalfitm:
             f.close()
     
     def run(self):
+        """Run galfitm
+
+        Returns:
+            str: output of run.
+        """        
         import subprocess
         output = subprocess.check_output(f'{self.executable} {self.feedme_path}', shell=True).decode("UTF-8")
         
