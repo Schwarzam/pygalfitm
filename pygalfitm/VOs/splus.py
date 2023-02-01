@@ -41,7 +41,7 @@ def get_splus(name, ra, dec, cut_size, data_folder, output_folder, conn, bands =
         SPLUS_WAVELENGHTS (dict, optional): SPLUS wavelenghts. Defaults to { "i": 7670.59, "r": 6251.83, "g": 4758.49, "z": 8936.64, "u": 3533.29, "J0378": 3773.13, "J0395": 3940.70, "J0410": 4095.27, "J0430": 4292.39, "J0515": 5133.15, "J0660": 6613.88, "J0861": 8607.59 }.
     
     Returns:
-        (str) : galfitm execution output in str
+        (pygalfitm.Pygalfitm) : Pygalfitm class with splus values. 
     """    
 
     
@@ -137,15 +137,15 @@ def get_splus(name, ra, dec, cut_size, data_folder, output_folder, conn, bands =
     })
 
     pyg.set_component("sersic", {
-        "1": ( string_times_x(cut_size / 2, 3), 1, "band" ),
-        "2": ( string_times_x(cut_size / 2, 3), 1, "band" ), 
+        "1": ( string_times_x(cut_size / 2, len(bands)), 1, "band" ),
+        "2": ( string_times_x(cut_size / 2, len(bands)), 1, "band" ), 
         "3": ( mags, 3, "band" ), 
         "4": ( effective_rs, 2, "band" ),
-        "5": ( string_times_x("4", 3), 2, "band" ),
+        "5": ( string_times_x("4", len(bands)), 2, "band" ),
         "9": ( axis_ratios, 1, "band" ),
         "10": ( position_angles, 1, "band" )
     })
 
     pyg.write_feedme()
-    _ = pyg.run()
-    return _
+    
+    return pyg
