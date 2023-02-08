@@ -1,4 +1,5 @@
 from astropy.io.fits import getheader
+from astropy.io import fits
 
 import pygalfitm
 from pygalfitm import PyGalfitm
@@ -9,7 +10,7 @@ import pandas as pd
 import os
 
 
-def get_splus(name, ra, dec, cut_size, data_folder, output_folder, conn, bands = ["I", "R", "G"], zpfile = None,
+def get_splus(name, ra, dec, cut_size, data_folder, output_folder, conn, remove_negatives=True, bands = ["I", "R", "G"], zpfile = None,
     SPLUS_WAVELENGHTS = {
             "i": 7670.59, 
             "r": 6251.83, 
@@ -36,6 +37,7 @@ def get_splus(name, ra, dec, cut_size, data_folder, output_folder, conn, bands =
         data_folder (str): folder path to save downloaded images to process
         output_folder (_type_): folder with galfitm outputs
         conn (splusdata.connect): splusdata logged in connection
+        remove_negatives (bool): Removes negatives values from images downloaded
         bands (list, optional): splus bands. Defaults to ["I", "R", "G"].
         zpfile (str, optional): path to zeropoint file, if None it will automatically download it. Defaults to None.
         SPLUS_WAVELENGHTS (dict, optional): SPLUS wavelenghts. Defaults to { "i": 7670.59, "r": 6251.83, "g": 4758.49, "z": 8936.64, "u": 3533.29, "J0378": 3773.13, "J0395": 3940.70, "J0410": 4095.27, "J0430": 4292.39, "J0515": 5133.15, "J0660": 6613.88, "J0861": 8607.59 }.
@@ -57,15 +59,14 @@ def get_splus(name, ra, dec, cut_size, data_folder, output_folder, conn, bands =
     for band in bands:
         band = band.lower()
         try:
-            conn.get_cut(ra, dec, 200, band.upper(), filepath=os.path.join(data_folder, f'{name}_{band.lower()}.fits'))
-        except Exception as e:
-            print(e)
+            f = conn.get_cut(ra, dec, cut_size, band.upper())
+            unpacked = fits.hdu.image.PrimaryHDU(data = f[1].data, header = f[1].header)
+            if remove_negatives:
+                unpacked.data = unpacked.data.clip(min=0)
+            fits.hdu.hdulist.HDUList(hdus=[unpacked]).writeto(os.path.join(data_folder, f'{name}_{band.lower()}.fits'), overwrite=True)    
         
-        try:
-            unpack_file(os.path.join(data_folder, f'{name}_{band.lower()}.fits.fz'))
         except Exception as e:
             print(e)
-            print("Make sure you have fpack (cfitsio) in your system alias.")
         
         make_psf(os.path.join(data_folder, f'{name}_{band.lower()}.fits'), outfile=os.path.join(data_folder, f'psf_{name}_{band.lower()}.fits'))
 
@@ -145,7 +146,5 @@ def get_splus(name, ra, dec, cut_size, data_folder, output_folder, conn, bands =
         "9": ( axis_ratios, 1, "band" ),
         "10": ( position_angles, 1, "band" )
     })
-
-    pyg.write_feedme()
     
     return pyg
