@@ -89,6 +89,69 @@ class PyGalfitm:
                 "2": {"col1": "0,0,0", "col2": "0", "col3": "band", "comment": "position y [pixel]"},
                 "3": {"col1": "0,0,0", "col2": "0", "col3": "band", "comment": "total magnitude "},
                 "Z": {"col1": "0", "col2": "", "col3": "", "comment": "Skip this model in output image? (yes=1, no=0)"}
+            },
+            "nuker" : {
+                "1":  {"col1": "300.", "col2": "1", "col3": "band", "comment": "Position x [pixel]"},
+                "2":  {"col1": "357.4", "col2": "1", "col3": "band", "comment": "Position y [pixel]"},
+                "3":  {"col1": "0,0,0", "col2": "3", "col3": "band", "comment": "mu(Rb)            [surface brightness mag. at Rb]"},
+                "4":  {"col1": "0,0,0", "col2": "2", "col3": "band", "comment": "Rb               [pixels]"},
+                "5":  {"col1": "0,0,0", "col2": "2", "col3": "band", "comment": "alpha  (sharpness of transition)"},
+                "6":  {"col1": "0,0,0", "col2": "2", "col3": "band", "comment": "beta   (outer powerlaw slope)"},
+                "7":  {"col1": "0,0,0", "col2": "1", "col3": "band", "comment": "gamma  (inner powerlaw slope)"},
+                "9": {"col1": "0,0,0", "col2": "1", "col3": "band", "comment": "axis ratio (b/a)"},
+                "10": {"col1": "0,0,0", "col2": "1", "col3": "band", "comment": "Position angle (PA) [deg: Up=0, Left=90]"},
+                "Z":  {"col1": "0", "col2": "", "col3": "", "comment": "Skip this model in output image? (yes=1, no=0)"}
+            },
+            "corser" : {
+                "1":  {"col1": "300.", "col2": "1", "col3": "band", "comment": "Position x [pixel]"},
+                "2":  {"col1": "357.4", "col2": "1", "col3": "band", "comment": "Position y [pixel]"},
+                "3":  {"col1": "0,0,0", "col2": "3", "col3": "band", "comment": "mu(Rb)            [surface brightness mag. at Rb]"},
+                "4":  {"col1": "0,0,0", "col2": "2", "col3": "band", "comment": "Rb               [pixels]"},
+                "5":  {"col1": "0,0,0", "col2": "2", "col3": "band", "comment": "alpha  (sharpness of transition)"},
+                "6":  {"col1": "0,0,0", "col2": "1", "col3": "band", "comment": "gamma  (inner powerlaw slope)"},
+                "7": {"col1": "0,0,0", "col2": "1", "col3": "band", "comment": "R_e (half-light radius)   [pix]"},
+                "8": {"col1": "0,0,0", "col2": "1", "col3": "band", "comment": "Sersic index n (de Vaucouleurs n=4) "},
+                "9": {"col1": "0,0,0", "col2": "1", "col3": "band", "comment": "axis ratio (b/a)"},
+                "10": {"col1": "0,0,0", "col2": "1", "col3": "band", "comment": "Position angle (PA) [deg: Up=0, Left=90]"},
+                "Z":  {"col1": "0", "col2": "", "col3": "", "comment": "Skip this model in output image? (yes=1, no=0)"}
+            },
+            "devauc" : {
+                "1":  {"col1": "300.", "col2": "1", "col3": "band", "comment": "Position x [pixel]"},
+                "2":  {"col1": "357.4", "col2": "1", "col3": "band", "comment": "Position y [pixel]"},
+                "3":  {"col1": "0,0,0", "col2": "3", "col3": "band", "comment": "Total magnitude"},
+                "4":  {"col1": "0,0,0", "col2": "2", "col3": "band", "comment": "Rs               [Pixels]"},
+                "9":  {"col1": "0,0,0", "col2": "1", "col3": "band", "comment": "Axis ratio (b/a)"},
+                "10": {"col1": "0,0,0", "col2": "1", "col3": "band", "comment": "Position angle (PA) [deg: Up=0, Left=90]"},
+                "Z":  {"col1": "0", "col2": "", "col3": "", "comment": "Skip this model in output image? (yes=1, no=0)"}
+            },
+            "edgedisk" : {
+                "1":  {"col1": "300.", "col2": "1", "col3": "band", "comment": "Position x [pixel]"},
+                "2":  {"col1": "357.4", "col2": "1", "col3": "band", "comment": "Position y [pixel]"},
+                "3":  {"col1": "0,0,0", "col2": "3", "col3": "band", "comment": "central surface brightness  [mag/arcsec^2]"},
+                "4":  {"col1": "0,0,0", "col2": "2", "col3": "band", "comment": "disk scale-height    [Pixels]"},
+                "5":  {"col1": "0,0,0", "col2": "2", "col3": "band", "comment": "disk scale-length    [Pixels]"},
+                "10": {"col1": "0,0,0", "col2": "1", "col3": "band", "comment": "Position angle (PA) [deg: Up=0, Left=90]"},
+                "Z":  {"col1": "0", "col2": "", "col3": "", "comment": "Skip this model in output image? (yes=1, no=0)"}
+            },
+            "gaussian" : {
+                "1":  {"col1": "300.", "col2": "1", "col3": "band", "comment": "Position x [pixel]"},
+                "2":  {"col1": "357.4", "col2": "1", "col3": "band", "comment": "Position y [pixel]"},
+                "3":  {"col1": "0,0,0", "col2": "3", "col3": "band", "comment": "Total magnitude"},
+                "4":  {"col1": "0,0,0", "col2": "2", "col3": "band", "comment": "FWHM               [pixels]"},
+                "9":  {"col1": "0,0,0", "col2": "1", "col3": "band", "comment": "Axis ratio (b/a)"},
+                "10": {"col1": "0,0,0", "col2": "1", "col3": "band", "comment": "Position angle (PA) [deg: Up=0, Left=90]"},
+                "Z":  {"col1": "0", "col2": "", "col3": "", "comment": "Skip this model in output image? (yes=1, no=0)"}
+            },
+            "king" : {
+                "1":  {"col1": "300", "col2": "1", "col3": "band", "comment": "Position x [pixel]"},
+                "2":  {"col1": "357.4", "col2": "1", "col3": "band", "comment": "Position y [pixel]"},
+                "3":  {"col1": "0,0,0", "col2": "3", "col3": "band", "comment": "mu(0)"},
+                "4":  {"col1": "0,0,0", "col2": "2", "col3": "band", "comment": "Rc"},
+                "5":  {"col1": "0,0,0", "col2": "2", "col3": "band", "comment": "Rt"},
+                "6":  {"col1": "0,0,0", "col2": "2", "col3": "band", "comment": "alpha"},
+                "9":  {"col1": "0,0,0", "col2": "1", "col3": "band", "comment": "Axis ratio (b/a)"},
+                "10": {"col1": "0,0,0", "col2": "1", "col3": "band", "comment": "Position angle (PA) [deg: Up=0, Left=90]"},
+                "Z":  {"col1": "0", "col2": "", "col3": "", "comment": "Skip this model in output image? (yes=1, no=0)"}
             }
         }
 
@@ -105,6 +168,13 @@ class PyGalfitm:
 
     def check_executable(self):
         if not os.path.exists(self.executable):
+            print("Executable path not found. ")
+            while True:
+                i = input("Do you want to download the executable? (y/n): ")
+                if i == "y":
+                    break 
+                elif i == "n":
+                    return
             
             if sys.platform == "darwin":
                 print("Downloading galfitm executable from " + "https://www.nottingham.ac.uk/astronomy/megamorph/exec/galfitm-1.4.4-osx")
@@ -136,11 +206,20 @@ class PyGalfitm:
         if component_s is None:
             self.active_components = []
             return
+
         if isinstance(component_s, list):
             for comp in component_s:
                 if comp in self.components:
-                    if comp not in self.active_components:
-                        self.active_components.append(comp)
+                    if comp in self.active_components:
+                        count = 0 
+                        for i in self.active_components:
+                            if comp in i:
+                                count += 1
+                        if count == 0:
+                            self.active_components.append(comp)
+                        else:
+                            self.active_components.append(str(comp) + str(count))
+                            print("Added component as " + str(comp) + str(count))
                 else:
                     raise Exception(f"Not valid component - {comp}")
         else:
