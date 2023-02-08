@@ -1,5 +1,6 @@
 import os
 import sys
+import copy
 
 import requests
 
@@ -192,7 +193,7 @@ class PyGalfitm:
 
             raise Exception(f"Run chmod +x {os.path.join(pygalfitm.__path__[0], 'galfitm')}")
 
-    def activate_components(self, component_s = None):
+    def activate_components(self, component_s : list = None):
         """This function is used to activate one or more components. 
         You may pass just a string with the component name, or a list. 
 
@@ -210,24 +211,21 @@ class PyGalfitm:
         if isinstance(component_s, list):
             for comp in component_s:
                 if comp in self.components:
-                    if comp in self.active_components:
-                        count = 0 
-                        for i in self.active_components:
-                            if comp in i:
-                                count += 1
-                        if count == 0:
-                            self.active_components.append(comp)
-                        else:
-                            self.active_components.append(str(comp) + str(count))
-                            print("Added component as " + str(comp) + str(count))
+                    count = 0 
+                    for i in self.active_components:
+                        if comp in i:
+                            count += 1
+
+                    if count == 0:
+                        self.active_components.append(comp)
+                    else:
+                        self.active_components.append(str(comp) + str(count))
+                        self.components_config[str(comp) + str(count)] = copy.deepcopy(self.components_config[str(comp)])
+                        print("Added component as " + str(comp) + str(count))
                 else:
                     raise Exception(f"Not valid component - {comp}")
         else:
-            if component_s in self.components:
-                if component_s not in self.active_components:
-                    self.active_components.append(component_s)
-            else:
-                raise Exception(f"Not valid component - {component_s}")
+            raise Exception(f"Parameter should be a list.")
 
 
     def set_base(self, item, value=""):
@@ -300,7 +298,6 @@ class PyGalfitm:
         else:
             raise Exception("Column not valid.")
         if component in self.components_config:
-            
             if isinstance(item, dict):
                 for i in item:
                     if isinstance(item[i], tuple):
@@ -376,13 +373,28 @@ class PyGalfitm:
             f = open(feedme_path, "a")
             f.write("\n\n\n")
 
-            f.write("0) " + component_name + "\n")
+            f.write("0) " + component_name.translate({ord(ch): None for ch in '0123456789'}) + "\n")
             for i in self.components_config[component_name]:
                 final = i + ") " + config[i]['col1'].ljust(35) + " " + config[i]['col2'].ljust(5) + config[i]['col3'].ljust(10) + " # " + config[i]['comment'] + "\n"
                 f.write(final)
 
             f.close()
     
+    def check_number_of_filters(self):
+        """Check parameter by parameter from active components that have correct number of bands. 
+        """        
+        nbands = len(self.base["A1"]["value"].split(","))
+        correct = True
+
+        for component in self.active_components:
+            for att in self.components_config[component]:
+                length = len(self.components_config[component][att]["col1"].split(","))
+                if length > 1 and length != nbands:
+                    print("Number of parameters incorrect in component: " + component + " - (" + att + ")")
+                    correct = False
+        return correct
+
+
     def run(self):
         """Run galfitm
 
@@ -390,6 +402,9 @@ class PyGalfitm:
             str: output of run.
         """        
         import subprocess
+
+        if not self.check_number_of_filters():
+            print("Warning! Running with possibly wrong parameters on components.")
 
         self.check_executable()
         output = subprocess.check_output(f'{self.executable} {self.feedme_path}', shell=True).decode("UTF-8")
