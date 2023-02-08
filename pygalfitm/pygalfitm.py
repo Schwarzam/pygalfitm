@@ -110,12 +110,17 @@ class PyGalfitm:
                 print("Downloading galfitm executable from " + "https://www.nottingham.ac.uk/astronomy/megamorph/exec/galfitm-1.4.4-osx")
                 r = requests.get("https://www.nottingham.ac.uk/astronomy/megamorph/exec/galfitm-1.4.4-osx")
                 open(os.path.join(pygalfitm.__path__[0], "galfitm"), "wb").write(r.content)
+            
+            if sys.platform == "linux":
+                print("Downloading galfitm executable from " + "https://www.nottingham.ac.uk/astronomy/megamorph/exec/galfitm-1.4.4-linux-x86_64")
+                r = requests.get("https://www.nottingham.ac.uk/astronomy/megamorph/exec/galfitm-1.4.4-linux-x86_64")
+                open(os.path.join(pygalfitm.__path__[0], "galfitm"), "wb").write(r.content)
                 
-                print(f"""PLEASE RUN:
-                    chmod +x {os.path.join(pygalfitm.__path__[0], "galfitm")}
-                """)
-        
-                raise Exception(f"Run chmod +x {os.path.join(pygalfitm.__path__[0], 'galfitm')}")
+            print(f"""PLEASE RUN:
+                chmod +x {os.path.join(pygalfitm.__path__[0], "galfitm")}
+            """)
+
+            raise Exception(f"Run chmod +x {os.path.join(pygalfitm.__path__[0], 'galfitm')}")
 
     def activate_components(self, component_s = None):
         """This function is used to activate one or more components. 
