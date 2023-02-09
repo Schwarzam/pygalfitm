@@ -342,7 +342,7 @@ class PyGalfitm:
         config = self.components_config[component]
         if component in self.components_config:
             for i in self.components_config[component]:
-                final = i + ") " + config[i]['col1'].ljust(35) + " " + config[i]['col2'].ljust(5) + config[i]['col3'].ljust(10) + " # " + config[i]['comment']
+                final = i + ") " + config[i]['col1'].ljust(35) + " " + config[i]['col2'].ljust(5) + " " + config[i]['col3'].ljust(10) + " # " + config[i]['comment']
                 print(final)
         else:
             raise KeyError("Component not found.")
