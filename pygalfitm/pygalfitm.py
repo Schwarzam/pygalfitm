@@ -6,6 +6,8 @@ import requests
 
 import pygalfitm
 
+from pygalfitm.plot import gen_plot
+
 class PyGalfitm:
     """PyGalfitM wrapper class. 
     """    
@@ -410,3 +412,18 @@ class PyGalfitm:
         output = subprocess.check_output(f'{self.executable} {self.feedme_path}', shell=True).decode("UTF-8")
         
         return output
+    
+    def gen_plot(self, component_selected = "sersic", plot_parameters = [], plotsize_factor = (1, 1), 
+             colorbar = True, lupton_stretch = 0.2, lupton_q = 8, fig_filename = None, return_plot = False, **kwargs):        
+        """Generates plot
+
+        :param \**kwargs:
+        See below
+
+        :Keyword Arguments:
+            * ``component_selected`` (``str``) --
+             component to plot on image
+        """
+        return gen_plot(self, component_selected, plot_parameters, plotsize_factor, 
+             colorbar, lupton_stretch, lupton_q, fig_filename, return_plot, **kwargs)
+            
