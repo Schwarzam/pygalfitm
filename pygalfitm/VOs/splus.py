@@ -10,7 +10,7 @@ import pandas as pd
 import os
 
 
-def get_splus(name, ra, dec, cut_size, data_folder, output_folder, conn, remove_negatives=True, bands = ["I", "R", "G"], zpfile = None,
+def get_splus_class(name, ra, dec, cut_size, data_folder, output_folder, conn, remove_negatives=True, bands = ["I", "R", "G"], zpfile = None,
     SPLUS_WAVELENGHTS = {
             "i": 7670.59, 
             "r": 6251.83, 
@@ -59,7 +59,7 @@ def get_splus(name, ra, dec, cut_size, data_folder, output_folder, conn, remove_
     for band in bands:
         band = band.lower()
         try:
-            f = conn.get_cut(ra, dec, cut_size, band.upper())
+            f = conn.get_cut(ra, dec, cut_size, band.replace("j0", "f").upper())
             unpacked = fits.hdu.image.PrimaryHDU(data = f[1].data, header = f[1].header)
             if remove_negatives:
                 unpacked.data = unpacked.data.clip(min=0)
@@ -73,7 +73,7 @@ def get_splus(name, ra, dec, cut_size, data_folder, output_folder, conn, remove_
         input_images += "," + os.path.join(data_folder, f'{name}_{band.lower()}.fits')
         psf_images += "," + os.path.join(data_folder, f'psf_{name}_{band.lower()}.fits')
         filters += "," + str(band).lower()
-        wavelenghts += "," + str(SPLUS_WAVELENGHTS[band.lower().replace("f", "J0")])
+        wavelenghts += "," + str(SPLUS_WAVELENGHTS[band.lower().lower().replace("f", "J0").replace("j0", "J0")])
 
     input_images = input_images[1:]
     psf_images = psf_images[1:]
@@ -88,7 +88,7 @@ def get_splus(name, ra, dec, cut_size, data_folder, output_folder, conn, remove_
     field = header['OBJECT']
 
     for band in bands:
-        zps += "," + str(df[df['Field'] == field.replace("_", "-")][f'ZP_{band.lower().replace("f", "J0")}'].values[0])
+        zps += "," + str(df[df['Field'] == field.replace("_", "-")][f'ZP_{band.lower().replace("f", "J0").replace("j0", "J0")}'].values[0])
     zps = zps[1:]
 
     ## Get axis_ratios, effective_rs, position_angles, mags
@@ -98,14 +98,15 @@ def get_splus(name, ra, dec, cut_size, data_folder, output_folder, conn, remove_
     mags : str = ""
 
     for band in bands:
-        band = band.lower()
 
+        band = band.lower().replace("j0", "J0").replace("f", "J0")
         table = conn.query(f"""
-            select * from "idr4_single"."idr4_single_{band}" as x
+            select * from "idr4_single"."idr4_single_{band.lower()}" as x
             where 
             1 = CONTAINS( POINT('ICRS', x.ra_{band}, x.dec_{band}), 
             CIRCLE('ICRS', {ra}, {dec}, 0.0015))
         """)
+        
         
         axis_ratios += "," + str( table[0][f"B_{band}"]/table[0][f"A_{band}"] )
         effective_rs += "," + str( table[0][f"FLUX_RADIUS_50_{band}"] )

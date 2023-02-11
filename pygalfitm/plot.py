@@ -32,7 +32,6 @@ def gen_plot(pygalfit, component_selected = "sersic", plot_parameters = [], plot
 
             plot_data[band].append( (values[key_band], comment) )
     
-    print(plot_data)
     n_filters = len(filters)
     filters_index = 0
     band_index = 0
@@ -44,7 +43,7 @@ def gen_plot(pygalfit, component_selected = "sersic", plot_parameters = [], plot
 
     actual_filter = ""
     for i in range(1, n_filters * 3 + 1):
-        ax = fig.add_subplot(3,5, i)
+        ax = fig.add_subplot(3, n_filters, i)
         im_data = make_lupton_rgb(fits_cube[i].data, fits_cube[i].data, fits_cube[i].data, stretch=lupton_stretch, Q=lupton_q)
         im = ax.imshow(im_data, cmap='gray', interpolation='none')
         
