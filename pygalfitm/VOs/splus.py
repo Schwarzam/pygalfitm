@@ -3,7 +3,7 @@ from astropy.io import fits
 
 import pygalfitm
 from pygalfitm import PyGalfitm
-from pygalfitm.auxiliars import string_times_x, get_dims, get_exptime, unpack_file, check_vo_file
+from pygalfitm.auxiliars import string_times_x, get_dims, get_exptime, unpack_file, check_vo_file, find_nearest_object
 from pygalfitm.psf import make_psf
 
 import pandas as pd
@@ -101,23 +101,24 @@ def get_splus_class(name, ra, dec, cut_size, data_folder, output_folder, conn, r
 
         band = band.lower().replace("j0", "J0").replace("f", "J0")
         table = conn.query(f"""
-            select * from "idr4_single"."idr4_single_{band.lower()}" as x
+            select ra_{band}, dec_{band}, B_{band}, A_{band}, FLUX_RADIUS_50_{band}, THETA_{band}, {band}_auto
+            from "idr4_single"."idr4_single_{band.lower()}" as x
             where 
             1 = CONTAINS( POINT('ICRS', x.ra_{band}, x.dec_{band}), 
             CIRCLE('ICRS', {ra}, {dec}, 0.0015))
         """)
+
+        obj = find_nearest_object(table.to_pandas(), ra, dec, ra_name=f"RA_{band}", dec_name=f"DEC_{band}")
         
-        
-        axis_ratios += "," + str( table[0][f"B_{band}"]/table[0][f"A_{band}"] )
-        effective_rs += "," + str( table[0][f"FLUX_RADIUS_50_{band}"] )
-        position_angles += "," + str( table[0][f"THETA_{band}"] )
-        mags += "," + str( table[0][f"{band}_auto"]  )
+        axis_ratios += "," + str( obj[f"B_{band}"]/obj[f"A_{band}"] )
+        effective_rs += "," + str( obj[f"FLUX_RADIUS_50_{band}"] )
+        position_angles += "," + str( obj[f"THETA_{band}"] )
+        mags += "," + str( obj[f"{band}_auto"]  )
 
     axis_ratios = axis_ratios[1:]
     effective_rs = effective_rs[1:]
     position_angles = position_angles[1:]
     mags = mags[1:]
-
 
     ## Setup pygalfitm class
     pyg = pygalfitm.PyGalfitm()

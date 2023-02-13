@@ -3,6 +3,9 @@ import requests
 import os
 import pygalfitm
 
+from astropy.coordinates import SkyCoord
+import astropy.units as u
+
 def unpack_file(filename, output=None, output_folder=None, delete_compressed = False):
     import os
     """
@@ -53,3 +56,26 @@ def check_vo_file(file, download_link):
         print("Writing " + os.path.join(pygalfitm.__path__[0], file))
         open(os.path.join(pygalfitm.__path__[0], file), "wb").write(r.content)
         print("Done!")
+
+
+def find_nearest_object(table, ra, dec, ra_name = "ra", dec_name = "dec") :
+    """
+    Function to find the nearest object in a table based on Right Ascension and Declination.
+
+    Parameters:
+    table : pandas DataFrame
+        DataFrame containing the table with objects.
+    ra : float
+        Right Ascension of the target position in degrees.
+    dec : float
+        Declination of the target position in degrees.
+
+    Returns:
+    nearest_object : pandas Series
+        Series representing the nearest object in the table.
+    """
+    target_coord = SkyCoord(ra=ra*u.degree, dec=dec*u.degree)
+    table_coords = SkyCoord(ra=table[ra_name]*u.degree, dec=table[dec_name]*u.degree)
+    idx, sep, _ = target_coord.match_to_catalog_sky(table_coords)
+    nearest_object = table.iloc[idx]
+    return nearest_object
