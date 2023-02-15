@@ -415,14 +415,22 @@ class PyGalfitm:
     
     def gen_plot(self, component_selected = "sersic", plot_parameters = [], plotsize_factor = (1, 1), 
              colorbar = True, lupton_stretch = 0.2, lupton_q = 8, fig_filename = None, return_plot = False, **kwargs):        
-        """Generates plot
-
-        :param \**kwargs:
-        See below
-
-        :Keyword Arguments:
-            * ``component_selected`` (``str``) --
-             component to plot on image
+        """
+            Generate a plot to visualize the input, model, and residual data of a PyGalfit model.
+            
+            Parameters:
+                - pygalfit (object): the PyGalfit model object, which contains the input and output data from the PyGalfit fitting.
+                - component_selected (str): the name of the PyGalfit component to plot (default is "sersic").
+                - plot_parameters (List[str]): a list of parameters to plot for the selected component (default is an empty list).
+                - plotsize_factor (Tuple[float, float]): a tuple specifying the size of the plot, default is (1,1).
+                - colorbar (bool): a boolean indicating whether to show the color bar on the plot (default is True).
+                - lupton_stretch (float): a float specifying the stretch factor used for the Lupton RGB image (default is 0.2).
+                - lupton_q (int): an integer specifying the Q factor used for the Lupton RGB image (default is 8).
+                - fig_filename (str): a string specifying the filename to save the plot to (default is None).
+                - return_plot (bool): a boolean indicating whether to return the plot object instead of showing it (default is False).
+                
+            Returns:
+                - fig (plt.Figure): the matplotlib Figure object, only if `return_plot` is True.
         """
         return gen_plot(self, component_selected, plot_parameters, plotsize_factor, 
              colorbar, lupton_stretch, lupton_q, fig_filename, return_plot, **kwargs)

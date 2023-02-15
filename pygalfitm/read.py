@@ -3,6 +3,14 @@ from pygalfitm import PyGalfitm
 from astropy.io import fits
 
 def read_output_to_class(filename):
+    """Reads a galfitm.feedme or .band result and returns a PyGalfitm class filled with the data.
+
+    Args:
+        filename (str): input file name.
+
+    Returns:
+        pygalfitm.PyGalfitm: PyGalfitm class filled with the data.
+    """    
     out = open(filename, "r").read()
 
     base = {}
