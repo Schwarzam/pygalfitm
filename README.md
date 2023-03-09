@@ -1,58 +1,42 @@
-# pygalfit
-AriAstro - GALFIT
+# pygalfitm
 
-Workdir - https://github.com/Schwarzam/ariastro
+Pygalfitm is a Python package that provides an interface to run the GALFITM software, a widely used tool in astrophysics for fitting 2D surface brightness distributions of galaxies. Pygalfitm simplifies the process of preparing input files, running GALFITM, and post-processing the output results.
 
-Original -> Schwarzam/ariastro
+Pygalfitm is built on top of the Python subprocess module, which allows for easy integration with other Python packages, such as Numpy and Matplotlib. It provides a set of classes and functions to define the GALFITM input parameters and run the fitting process, as well as a set of utilities to visualize the results.
 
-2nd Column Description:
+The Pygalfitm class provides an easy-to-use interface to interact with the GALFITM software. It includes functions to activate and set component parameters, write the input files, and run GALFITM. Additionally, it provides a function to generate plots to visualize the input, model, and residual data of the fitted galaxy.
 
-0 - Do not fit, do not adjust anything
-1 - Best among the bands given, weighted mean 
-2 - Parameter change linearly among bands
+Pygalfitm can be installed using pip:
 
-Above (degrees of freedom)
-3 - Magnitudes (Pure measeure) degrees of freedom
-for 5 bands put 5 
-for 12 bands put 8
+```
+pip3 install pygalfitm
+```
 
+#### Check out GALFITM page
 
-They need to follow the order of the wavelenghts.
+https://www.nottingham.ac.uk/astronomy/megamorph/
 
-People choose the object and object size.
+#### Contributing
 
+Contributions are welcome and greatly appreciated. Here are some ways you can contribute to Pygalfitm:
 
-- [ ] C - sigma image, may be made with weight images
-- [ ] F - May be created with weight images
-- [ ] H - Make it user input 
-- [ ] I - 6-10x times FWMH of the psf image of the image —> S-plus would be 60 or 40
+Report any bugs or issues you encounter by opening a new issue.
+Suggest new features or improvements by opening a new issue.
+Contribute code to fix bugs or add new features by submitting a pull request.
+Help with documentation by fixing errors or suggesting improvements.
+Share Pygalfitm with others who might find it useful.
+Donate to support the development and maintenance of Pygalfitm.
+If you would like to contribute code, please follow these guidelines:
 
-
-- [ ] Component 1: sky
-- [ ] 1 - should be 0 the sky background
-
-- [ ] Sersic
-- [ ] 4 - R_e - KRON RAdius / 2 (guess) 
-- [ ] 5 - Sersic index good to start with 4
-- [ ] 9 - Axis ratio - KU - CU
-- [ ] 10 - Position angle - PA
-
-
-- [ ] EXPDISK 
-- [ ] From R_e we can get R_s 
-
-We may run a first run for sersic and then adjust it to others
+Fork the Pygalfitm repository and create a new branch for your changes.
+Write clear and concise commit messages.
+Follow the existing code style and conventions.
+Write tests to ensure that your changes work as intended.
+Update the documentation to reflect any changes you make.
+Submit a pull request to the main Pygalfitm repository.
+Thank you for your interest in contributing to Pygalfitm!
 
 
-Functions:
-- Sersic
-- Expdisk
-- Moffat
-- Ferrer
-- Psf
-- Sky 
+#### LICENSE 
 
-
-Negative pixels in the image -> check if there are negative values and choose to maybe put them equal to 0. 
-
-
+Pygalfitm is distributed under the MIT License.
