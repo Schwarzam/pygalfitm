@@ -11,12 +11,15 @@ from pygalfitm.plot import gen_plot
 class PyGalfitm:
     """PyGalfitM wrapper class. 
     """    
-    def __init__(self, executable = os.path.join(pygalfitm.__path__[0], "galfitm")):
+    def __init__(self, executable : str = os.path.join(pygalfitm.__path__[0], "galfitm")):   
         """Here we initialize the class with default values for the base and components. 
 
         Base values are in self.base variable 
 
         Components are stored in self.components_config
+
+        Args:
+            executable (str, optional): Path pointing to galfitm executable, if left as default downloads the executable depending on the OS. Defaults to os.path.join(pygalfitm.__path__[0], "galfitm").
         """        
         self.feedme_path = "galfit.feedme"
         self.executable = executable
