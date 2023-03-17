@@ -8,6 +8,8 @@ The Pygalfitm class provides an easy-to-use interface to interact with the GALFI
 
 Pygalfitm can be installed using pip:
 
+### A good example of how it works is inside **example.ipynb** notebook.
+
 ```
 pip3 install pygalfitm
 ```
@@ -18,24 +20,7 @@ https://www.nottingham.ac.uk/astronomy/megamorph/
 
 #### Contributing
 
-Contributions are welcome and greatly appreciated. Here are some ways you can contribute to Pygalfitm:
-
- - Report any bugs or issues you encounter by opening a new issue.
- - Suggest new features or improvements by opening a new issue.
- - Contribute code to fix bugs or add new features by submitting a pull request.
- - Help with documentation by fixing errors or suggesting improvements.
- - Share Pygalfitm with others who might find it useful.
- - Donate to support the development and maintenance of Pygalfitm.
- - If you would like to contribute code, please follow these guidelines:
-
- - Fork the Pygalfitm repository and create a new branch for your changes.
- - Write clear and concise commit messages.
- - Follow the existing code style and conventions.
- - Write tests to ensure that your changes work as intended.
- - Update the documentation to reflect any changes you make.
- - Submit a pull request to the main Pygalfitm repository.
- - Thank you for your interest in contributing to Pygalfitm!
-
+Contributions are welcome and greatly appreciated.
 
 #### LICENSE 
 
