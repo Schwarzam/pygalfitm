@@ -11,6 +11,8 @@ Pygalfitm can be installed using pip:
 ### A good example of how it works is inside **example.ipynb** notebook.
 
 ```
+python3 setup.py build
+
 python3 setup.py install
 ```
 

@@ -12,7 +12,8 @@ pygalfitm.egg-info
 dist 
 build
 
-dev/*/
+dev/data/
+dev/outputs/
 
 splusZPs.csv
 
