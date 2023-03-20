@@ -7,6 +7,7 @@ import requests
 import pygalfitm
 
 from pygalfitm.plot import gen_plot
+from pygalfitm.auxiliars import remove_parentheses_and_brackets
 
 class PyGalfitm:
     """PyGalfitM wrapper class. 
@@ -23,6 +24,8 @@ class PyGalfitm:
         """        
         self.feedme_path = "galfit.feedme"
         self.executable = executable
+
+        self.name = ""
 
         self.base = {
             "A": {"value": "", "comment": "Input data image (FITS file)"},
@@ -437,4 +440,41 @@ class PyGalfitm:
         """
         return gen_plot(self, component_selected, plot_parameters, plotsize_factor, 
              colorbar, lupton_stretch, lupton_q, fig_filename, return_plot, **kwargs)
+
+    def create_result_table(self):
+        """
+        Creates a Pandas DataFrame containing result data for components 
+        and their corresponding values for each band.
+
+        This function reads the band data from the 'base' attribute and component data from the 'components_config' attribute.
+        It iterates through each component and its keys, extracting values for each band, and then combines them into a dictionary.
+        Finally, it converts the dictionary into a Pandas DataFrame and returns it.
+
+        Returns:
+        pd.DataFrame: A DataFrame containing result data for components and their corresponding values for each band, with column names in the format "component_col_name_band".
+        """
+        import pandas as pd
+
+        bands = self.base["A1"]["value"].strip().split(",")
+        data = {}
+
+        for component in self.components_config:
+            for key in self.components_config[component]:
+                col_name = remove_parentheses_and_brackets(self.components_config[component][key]["comment"])
+                if "--" in col_name:
+                    continue
+                
+                values = self.components_config[component][key]["col1"].strip().split(",")
+                if len(values) == len(bands):
+                    
+                    for band in bands:
+                        data[f"{component}_{col_name}_{band}"] = values[bands.index(band)]
+
+
+        values = self.base["J"]["value"].strip().split(",")
+        for band, value in zip(bands, values):
+            data[f"ZP_{band}"] = value
+
+        df = pd.DataFrame.from_dict({os.path.basename(self.name): data})
+        return df
             

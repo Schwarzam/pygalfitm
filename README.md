@@ -8,7 +8,11 @@ The Pygalfitm class provides an easy-to-use interface to interact with the GALFI
 
 Pygalfitm can be installed using pip:
 
-### A good example of how it works is inside **example.ipynb** notebook.
+### Examples
+
+A good example of how it works is inside **example.ipynb** and **example-splus** notebook.
+
+There is also a folder with some usefull scripts inside dev/scripts (working with tables and so on...)
 
 ```
 python3 setup.py build

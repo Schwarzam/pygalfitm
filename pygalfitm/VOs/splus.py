@@ -122,6 +122,7 @@ def get_splus_class(name, ra, dec, cut_size, data_folder, output_folder, conn, r
 
     ## Setup pygalfitm class
     pyg = pygalfitm.PyGalfitm()
+    pyg.name = name
     pyg.feedme_path = os.path.join(output_folder, "galfit.feedme")
     pyg.activate_components()
     pyg.activate_components(["sersic"])

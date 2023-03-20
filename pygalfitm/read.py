@@ -12,6 +12,7 @@ def read_output_to_class(filename):
         pygalfitm.PyGalfitm: PyGalfitm class filled with the data.
     """    
     out = open(filename, "r").read()
+    name = f"{filename}ss.galfit.01.band".split(".galfit")[0].rstrip("ss")
 
     base = {}
     components = {}
@@ -75,6 +76,7 @@ def read_output_to_class(filename):
             components[in_current_component][letter]["comment"] = comment
 
         pyg = PyGalfitm()
+        pyg.name = name
         pyg.base = base
         pyg.components_config = components
 

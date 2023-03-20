@@ -77,9 +77,6 @@ def get_exptime(filename):
     hdulist.close()
     return ret
 
-
-
-
 def check_vo_file(file, download_link):
     """
     Checks if a file required for the pygalfitm package is available. If the file is not present, the function downloads
@@ -126,3 +123,60 @@ def find_nearest_object(table, ra, dec, ra_name = "ra", dec_name = "dec") :
     idx, sep, _ = target_coord.match_to_catalog_sky(table_coords)
     nearest_object = table.iloc[idx]
     return nearest_object
+
+
+def remove_parentheses_and_brackets(s):
+    """Removes any parts of a string that are inside parentheses or square brackets.
+
+    Parameters:
+    s (str): The input string.
+
+    Returns:
+    str: The input string with any parts inside parentheses or square brackets removed.
+
+    Example:
+    >>> remove_parentheses_and_brackets('Sersic index n (de Vaucouleurs n=4) [some notes]')
+    'Sersic_index_n'
+    """
+    result = ''
+    skip_parentheses = 0
+    skip_brackets = 0
+    for i in range(len(s)):
+        if s[i] == '(':
+            skip_parentheses += 1
+        elif s[i] == ')':
+            skip_parentheses -= 1
+        elif s[i] == '[':
+            skip_brackets += 1
+        elif s[i] == ']':
+            skip_brackets -= 1
+        elif skip_parentheses == 0 and skip_brackets == 0:
+            result += s[i]
+    return result.strip().replace(" ", "_")
+
+def clear_folder(folder_path):
+    """
+    Clears all files and folders inside a given folder.
+    
+    Args:
+    - folder_path (str): The path of the folder to clear.
+    """
+    # Check if the folder exists
+    if not os.path.exists(folder_path):
+        # If the folder doesn't exist, raise an error
+        raise ValueError(f"The folder {folder_path} doesn't exist.")
+    
+    # Iterate over the contents of the folder
+    for filename in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, filename)
+        try:
+            # If the current item is a file, delete it
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+            # If the current item is a folder, clear it recursively
+            elif os.path.isdir(file_path):
+                clear_folder(file_path)
+                os.rmdir(file_path)
+        except Exception as e:
+            # If there's an error deleting the file or folder, print a warning message
+            print(f"Warning: Failed to delete {file_path}. Reason: {e}")
