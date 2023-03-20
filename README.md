@@ -15,6 +15,12 @@ A good example of how it works is inside **example.ipynb** and **example-splus**
 There is also a folder with some usefull scripts inside dev/scripts (working with tables and so on...)
 
 ```
+pip3 install pygalfitm
+```
+
+#### OR
+
+```
 python3 setup.py build
 
 python3 setup.py install
