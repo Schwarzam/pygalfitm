@@ -397,9 +397,16 @@ class PyGalfitm:
         for component in self.active_components:
             for att in self.components_config[component]:
                 length = len(self.components_config[component][att]["col1"].split(","))
+                degrees = int(self.components_config[component][att]["col2"].split(","))
+                if length > 1 and length > degrees:
+                    print("Higher degrees of freedom than params in component: " + component + " - (" + att + ")")
+                    correct = False
+
                 if length > 1 and length != nbands:
                     print("Number of parameters incorrect in component: " + component + " - (" + att + ")")
                     correct = False
+        
+
         return correct
 
 
@@ -415,8 +422,13 @@ class PyGalfitm:
             print("Warning! Running with possibly wrong parameters on components.")
 
         self.check_executable()
-        output = subprocess.check_output(f'{self.executable} {self.feedme_path}', shell=True).decode("UTF-8")
-        
+        try:
+            output = subprocess.check_output(f'{self.executable} {self.feedme_path}', shell=True).decode("UTF-8")
+        except subprocess.CalledProcessError as e:
+            output = e.output.decode("UTF-8")
+            print(output)
+            raise Exception("Error running galfitm.")
+
         return output
     
     def gen_plot(self, component_selected = "sersic", plot_parameters = [], plotsize_factor = (1, 1), 
@@ -457,6 +469,8 @@ class PyGalfitm:
 
         bands = self.base["A1"]["value"].strip().split(",")
         data = {}
+        
+        
 
         for component in self.components_config:
             for key in self.components_config[component]:

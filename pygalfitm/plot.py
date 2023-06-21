@@ -98,12 +98,11 @@ def gen_plot(pygalfit: object, component_selected: str = "sersic", plot_paramete
     plt.subplots_adjust(hspace=0.05)
 
     if fig_filename and not return_plot:
-        plt.imsave(fig_filename)
-        plt.close(fig)
+        fig.savefig(fig_filename)
         return 
     
     elif fig_filename and return_plot:
-        plt.imsave(fig_filename)
+        fig.savefig(fig_filename)
 
     if return_plot:
         return fig

@@ -25,6 +25,7 @@ def get_splus_class(name, ra, dec, cut_size, data_folder, output_folder, conn, r
             "J0660": 6613.88,
             "J0861": 8607.59
     }, 
+    conv_box_const = 60,
     **kwargs):
     """Function to get splus data and process it with galfitm
     You may copy this code and adapt it to your needs
@@ -41,13 +42,10 @@ def get_splus_class(name, ra, dec, cut_size, data_folder, output_folder, conn, r
         bands (list, optional): splus bands. Defaults to ["I", "R", "G"].
         zpfile (str, optional): path to zeropoint file, if None it will automatically download it. Defaults to None.
         SPLUS_WAVELENGHTS (dict, optional): SPLUS wavelenghts. Defaults to { "i": 7670.59, "r": 6251.83, "g": 4758.49, "z": 8936.64, "u": 3533.29, "J0378": 3773.13, "J0395": 3940.70, "J0410": 4095.27, "J0430": 4292.39, "J0515": 5133.15, "J0660": 6613.88, "J0861": 8607.59 }.
-    
+        conv_box_const (int, optional): convolution box size. Defaults to 60.
     Returns:
         (pygalfitm.Pygalfitm) : Pygalfitm class with splus values. 
     """    
-
-    
-
 
     ##Get wavelenghts, input_images, psf_images, filters, zps
     wavelenghts = ""
@@ -55,6 +53,7 @@ def get_splus_class(name, ra, dec, cut_size, data_folder, output_folder, conn, r
     psf_images = ""
     filters = ""
     zps = ""
+    conv_boxes = ""
 
     for band in bands:
         band = band.lower()
@@ -69,17 +68,23 @@ def get_splus_class(name, ra, dec, cut_size, data_folder, output_folder, conn, r
             print(e)
         
         make_psf(os.path.join(data_folder, f'{name}_{band.lower()}.fits'), outfile=os.path.join(data_folder, f'psf_{name}_{band.lower()}.fits'))
-
-        input_images += "," + os.path.join(data_folder, f'{name}_{band.lower()}.fits')
+        
+        im_name = os.path.join(data_folder, f'{name}_{band.lower()}.fits')
+        input_images += "," + im_name
         psf_images += "," + os.path.join(data_folder, f'psf_{name}_{band.lower()}.fits')
         filters += "," + str(band).lower()
         wavelenghts += "," + str(SPLUS_WAVELENGHTS[band.lower().lower().replace("f", "J0").replace("j0", "J0")])
+        
+        im_header = getheader(im_name)
+        for key in im_header:
+            if "FWHMMEAN" in key:
+                conv_boxes += "," + str(conv_box_const * float(im_header[key]))
 
     input_images = input_images[1:]
     psf_images = psf_images[1:]
     filters = filters[1:]    
     wavelenghts = wavelenghts[1:]
-
+    conv_boxes = conv_boxes[1:]
 
     ## Get ZPs
     check_vo_file("VOs/splusZPs.csv", "https://splus.cloud/files/documentation/iDR4/tabelas/iDR4_zero-points.csv") ## Check if zps file exists
