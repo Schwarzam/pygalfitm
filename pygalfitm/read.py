@@ -1,5 +1,6 @@
 from pygalfitm import PyGalfitm
 
+import os
 from astropy.io import fits
 
 def read_output_to_class(filename):
@@ -76,7 +77,7 @@ def read_output_to_class(filename):
             components[in_current_component][letter]["comment"] = comment
 
         pyg = PyGalfitm()
-        pyg.name = name
+        pyg.name = os.path.basename(name)
         pyg.base = base
         pyg.components_config = components
 

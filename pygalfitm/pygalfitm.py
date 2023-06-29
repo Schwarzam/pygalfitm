@@ -4,6 +4,9 @@ import copy
 
 import requests
 
+from astropy.io import fits
+from astropy.table import Table
+
 import pygalfitm
 
 from pygalfitm.plot import gen_plot
@@ -397,8 +400,10 @@ class PyGalfitm:
         for component in self.active_components:
             for att in self.components_config[component]:
                 length = len(self.components_config[component][att]["col1"].split(","))
-                degrees = int(self.components_config[component][att]["col2"].split(","))
-                if length > 1 and length > degrees:
+                if length == 1: ## These is due to the skip image parameter
+                    continue
+                degrees = int(self.components_config[component][att]["col2"].split(",")[0])
+                if length > 1 and length < degrees:
                     print("Higher degrees of freedom than params in component: " + component + " - (" + att + ")")
                     correct = False
 
@@ -491,4 +496,77 @@ class PyGalfitm:
 
         df = pd.DataFrame.from_dict({os.path.basename(self.name): data})
         return df
-            
+
+    def create_fits_table(self, out_table):
+        """
+        Create or update a FITS table from component configuration data.
+
+        Parameters
+        ----------
+        out_table : str
+            The path to the output FITS file. If the file already exists, it is updated with new data.
+            Otherwise, a new file is created.
+
+        Returns
+        -------
+        None
+
+        Notes
+        -----
+        Each band is treated as a separate binary table within the FITS file (an HDU, or Header/Data Unit).
+        If the file does not exist, it is created with HDUs for each band. If the file does exist, it is 
+        opened for update and the existing HDUs are updated with new rows of data.
+
+        If the existing file has a different number of HDUs than expected based on the number of bands, 
+        a message is printed and no changes are made.
+
+
+        Raises
+        ------
+        IOError
+            If the out_table file path is not writable or if there's an error in opening the FITS file.
+        """
+        bands = self.base["A1"]["value"].strip().split(",")
+        nbands = len(bands)
+        data = {}
+        for band in bands:
+            data[band] = {}
+
+        for component in self.components_config:
+            for key in self.components_config[component]:
+                col_name = remove_parentheses_and_brackets(self.components_config[component][key]["comment"])
+                if "--" in col_name:
+                    continue
+
+                values = self.components_config[component][key]["col1"].strip().split(",")
+                if len(values) == len(bands):
+                    for band in bands:
+                        col = f"{component}_{col_name}"
+                        data[band]["ID"] = [self.name]
+                        data[band][col] = [float(values[bands.index(band)]) + 1]
+
+        values = self.base["J"]["value"].strip().split(",")
+        for band, value in zip(bands, values):
+            data[band][f"ZP"] = [float(value)]
+
+        if not os.path.exists(out_table):
+            cube = fits.HDUList([])
+            for band in data:
+                table = Table(data[band])
+                hdu = fits.BinTableHDU(name=band, data=table)
+                cube.append(hdu)
+                
+            cube.writeto(out_table)
+        
+        else:
+            cube = fits.open(out_table, mode="update")
+            if len(cube) == (nbands + 1):
+                for key, hdu in enumerate(cube):
+                    if key == 0:
+                        continue
+                    table = Table(cube[key].data.copy())
+                    table.add_row(data[cube[key].name.lower()])             
+                    cube[key] = fits.BinTableHDU(data=table, name=cube[key].name)
+                cube.flush()
+            else:
+                print("Cube not compatible, different number of hdus and bands to save.")

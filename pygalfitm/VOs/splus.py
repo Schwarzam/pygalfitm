@@ -7,6 +7,7 @@ from pygalfitm.auxiliars import string_times_x, get_dims, get_exptime, unpack_fi
 from pygalfitm.psf import make_psf
 
 import pandas as pd
+import numpy as np
 import os
 
 
@@ -53,6 +54,8 @@ def get_splus_class(name, ra, dec, cut_size, data_folder, output_folder, conn, r
     psf_images = ""
     filters = ""
     zps = ""
+
+    fwhmmeans = []
     conv_boxes = ""
 
     for band in bands:
@@ -78,13 +81,15 @@ def get_splus_class(name, ra, dec, cut_size, data_folder, output_folder, conn, r
         im_header = getheader(im_name)
         for key in im_header:
             if "FWHMMEAN" in key:
-                conv_boxes += "," + str(conv_box_const * float(im_header[key]))
+                fwhmmeans.append(im_header[key])
+
+    fwhmmean = np.array(fwhmmeans).mean() * conv_box_const
+    conv_boxes += f"{fwhmmean}   {fwhmmean}"
 
     input_images = input_images[1:]
     psf_images = psf_images[1:]
     filters = filters[1:]    
     wavelenghts = wavelenghts[1:]
-    conv_boxes = conv_boxes[1:]
 
     ## Get ZPs
     check_vo_file("VOs/splusZPs.csv", "https://splus.cloud/files/documentation/iDR4/tabelas/iDR4_zero-points.csv") ## Check if zps file exists
@@ -142,6 +147,7 @@ def get_splus_class(name, ra, dec, cut_size, data_folder, output_folder, conn, r
         "H": f"1   {cut_size}  1   {cut_size}",
         "I": f"{cut_size} {cut_size}",
         "J": zps,
+        "I": conv_boxes,
         "K": "0.55 0.55"
     })
 
