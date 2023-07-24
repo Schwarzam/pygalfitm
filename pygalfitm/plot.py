@@ -6,6 +6,9 @@ from typing import List, Tuple
 
 from astropy.visualization import make_lupton_rgb
 
+def gen_color_plot(pygalfit: object, band_combinations):
+    pass
+
 def gen_plot(pygalfit: object, component_selected: str = "sersic", plot_parameters: List[str] = [],
              plotsize_factor: Tuple[float, float] = (1, 1), colorbar: bool = True, lupton_stretch: float = 0.2, 
              lupton_q: int = 8, fig_filename: str = None, return_plot: bool = False):

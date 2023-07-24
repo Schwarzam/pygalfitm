@@ -13,7 +13,7 @@ parser = argparse.ArgumentParser(description='This is a script that uses pygalfi
 
 # Add the arguments
 parser.add_argument('table_path', type=str, help='path to the table')
-parser.add_argument('-C', '--cut_size', type=str, default=200, help='Box size of the images.')
+parser.add_argument('-C', '--cut_size', type=int, default=200, help='Box size of the images.')
 parser.add_argument('-U', '--splususer', type=str, default=None, help='Splus.cloud user.')
 parser.add_argument('-P', '--spluspassword', type=str, default=None, help='Splus.cloud password.')
 parser.add_argument('-F', '--data_folder', type=str, default="../data/", help='Data folder.')
@@ -78,7 +78,7 @@ for key, value in df.iterrows():
     print("====================================")
     print(f"Starting {name}")
 
-    cut_size = args.cut_size
+    cut_size = int(args.cut_size)
 
     outfolder = os.path.join(OUTPUT_FOLDER, name)
     datafolder = os.path.join(DATA_FOLDER, name)
