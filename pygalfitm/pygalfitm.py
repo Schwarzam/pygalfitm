@@ -9,7 +9,7 @@ from astropy.table import Table
 
 import pygalfitm
 
-from pygalfitm.plot import gen_plot
+from pygalfitm.plot import gen_plot, gen_color_plot
 from pygalfitm.auxiliars import remove_parentheses_and_brackets
 
 class PyGalfitm:
@@ -457,6 +457,22 @@ class PyGalfitm:
         """
         return gen_plot(self, component_selected, plot_parameters, plotsize_factor, 
              colorbar, lupton_stretch, lupton_q, fig_filename, return_plot, **kwargs)
+
+    def gen_color_plot(self, band_combinations=["i,r,g", "u,f378,f395"], lupton_stretch=3.5, lupton_Q=8, return_plot=False, fig_filename=None):
+        """Generate a color plot to visualize the input, model, and residual data of a PyGalfit model combining 3 filters.
+
+        Args:
+            pygalfit (_type_): the PyGalfit model object, which contains the input and output data from the PyGalfit fitting.
+            band_combinations (list, optional): Combination of filters to create colors, order R G B. Defaults to ["i,r,g", "u,f378,f395"].
+            lupton_stretch (float, optional): Make lupton function stretch. Defaults to 3.5.
+            lupton_Q (int, optional): Make lupton function Q. Defaults to 8.
+            return_plot (bool, optional): a boolean indicating whether to return the plot object instead of showing it (default is False).
+            fig_filename (_type_, optional): a string specifying the filename to save the plot to (default is None).
+
+        """
+            
+        gen_color_plot(self, band_combinations=["i,r,g", "u,f378,f395"], lupton_stretch=3.5, lupton_Q=8, return_plot=False, fig_filename=None)
+
 
     def create_result_table(self):
         """
