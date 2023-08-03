@@ -471,7 +471,7 @@ class PyGalfitm:
 
         """
             
-        gen_color_plot(self, band_combinations=["i,r,g", "u,f378,f395"], lupton_stretch=3.5, lupton_Q=8, return_plot=False, fig_filename=None)
+        gen_color_plot(self, band_combinations=band_combinations, lupton_stretch=3.5, lupton_Q=8, return_plot=False, fig_filename=None)
 
 
     def create_result_table(self):
