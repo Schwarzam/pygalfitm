@@ -29,6 +29,8 @@ parser.add_argument('-F', '--data_folder', type=str, default="../dev/data/", hel
 parser.add_argument('-O', '--output_folder', type=str, default="../dev/outputs/", help='Output folder.')
 parser.add_argument('-L', '--plot_path', type=str, default="../dev/outputs/pygalfitm.png", help='Plot folder.')
 parser.add_argument('-G', '--galfit_path', type=str, default=None, help='Path to galfit executable.')
+parser.add_argument('-S', '--color_filer_saturation', type=float, default=0.5, help='Color filter saturation.')
+
 
 # Execute the parse_args() method
 args = parser.parse_args()
@@ -151,6 +153,8 @@ filters = pygalgitm_object.base['A1']['value'].split(",")
 for key, band in enumerate(filters): 
     filters[key] = band.strip()
 
+fits_cube = fits.open(os.path.join(OUTPUT_FOLDER, "testss.fits"))
+
 input_data = {f: fits_cube[i + 1].data for i, f in enumerate(filters)}
 model_data = {f: fits_cube[i + len(filters) + 1].data for i, f in enumerate(filters)}
 residual_data = {f: fits_cube[i + 2*len(filters) + 1].data for i, f in enumerate(filters)}
@@ -170,22 +174,21 @@ colors = {
     'j0861': (97, 0, 0)
 }
 
-thresholds = {
-    'i': 43,
-    'r': 40,
-    'g': 40,
-    'z': 48,
-    'u': 60,
-    'j0378': 110,
-    'j0395': 120,
-    'j0410': 71,
-    'j0430': 65,
-    'j0515': 50,
-    'j0660': 42,
-    'j0861': 40  
-}
+# thresholds = {
+#     'i': 43,
+#     'r': 40,
+#     'g': 40,
+#     'z': 48,
+#     'u': 60,
+#     'j0378': 110,
+#     'j0395': 120,
+#     'j0410': 71,
+#     'j0430': 65,
+#     'j0515': 50,
+#     'j0660': 42,
+#     'j0861': 40  
+# }
 
-join(OUTPUT_FOLDER, f"input_{key}.fits")
 from os.path import join
 
 print("------------------------------------")
@@ -207,13 +210,13 @@ for key in input_data:
     os.system(f"fitspng -o {model_im} {model_name}")
     os.system(f"fitspng -o {residual_im} {residual_name}")
     
-    apply_colorfilter(input_im, colors[key], 10, 0.5)
-    apply_colorfilter(model_im, colors[key], 10, 0.5)
-    apply_colorfilter(residual_im, colors[key], 10, 0.5)
+    apply_colorfilter(input_im, colors[key], 10, args.color_filer_saturation)
+    apply_colorfilter(model_im, colors[key], 10, args.color_filer_saturation)
+    apply_colorfilter(residual_im, colors[key], 10, args.color_filer_saturation)
 
-ainput_data = {f: open_file(join(OUTPUT_FOLDER, "input_{f}.png")) for i, f in enumerate(filters)}
-amodel_data = {f: open_file(join(OUTPUT_FOLDER, "model_{f}.png")) for i, f in enumerate(filters)}
-aresidual_data = {f: open_file(join(OUTPUT_FOLDER, "residual_{f}.png")) for i, f in enumerate(filters)}
+ainput_data = {f: open_file(join(OUTPUT_FOLDER, f"input_{f}.png")) for i, f in enumerate(filters)}
+amodel_data = {f: open_file(join(OUTPUT_FOLDER, f"model_{f}.png")) for i, f in enumerate(filters)}
+aresidual_data = {f: open_file(join(OUTPUT_FOLDER, f"residual_{f}.png")) for i, f in enumerate(filters)}
 
 fig, axs = plt.subplots(3, 12, figsize=(20, 5))  # Create 3x12 subplots
 
