@@ -18,7 +18,7 @@ parser.add_argument('-U', '--splususer', type=str, default=None, help='Splus.clo
 parser.add_argument('-P', '--spluspassword', type=str, default=None, help='Splus.cloud password.')
 parser.add_argument('-F', '--data_folder', type=str, default="../data/", help='Data folder.')
 parser.add_argument('-O', '--output_folder', type=str, default="../outputs/", help='Output folder.')
-
+parser.add_argument('-G', '--galfit_path', type=str, default=None, help='Path to galfit executable.')
 
 # Execute the parse_args() method
 args = parser.parse_args()
@@ -106,6 +106,9 @@ for key, value in df.iterrows():
     pygal_obj.write_feedme()
     pygal_obj.create_fits_table(os.path.join(OUTPUT_FOLDER, "before_fit.fits"))
     
+    if args.galfit_path is not None:
+        pygal_obj.executable = args.galfit_path
+
     _ = pygal_obj.run()
 
     os.path.join(outfolder, f"{name}ss.galfit.01.band")
