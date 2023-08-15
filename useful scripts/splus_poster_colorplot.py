@@ -30,6 +30,7 @@ parser.add_argument('-O', '--output_folder', type=str, default="../dev/outputs/"
 parser.add_argument('-L', '--plot_path', type=str, default="../dev/outputs/pygalfitm.png", help='Plot folder.')
 parser.add_argument('-G', '--galfit_path', type=str, default=None, help='Path to galfit executable.')
 parser.add_argument('-S', '--color_filer_saturation', type=float, default=0.5, help='Color filter saturation.')
+parser.add_argument('-T', '--rotate_plots', type=bool, default=False, help='Rotate each image in plot.')
 
 
 # Execute the parse_args() method
@@ -41,6 +42,9 @@ conn = splusdata.connect(args.splususer, args.spluspassword)
 def open_file(path_to_file):
     im_frame = Image.open(path_to_file)
     np_frame = np.array(im_frame)
+
+    if args.rotate_plots:
+        np_frame = np.rot90(np_frame)
     return np_frame
 
 def rgb_to_hue(rgb_color):
@@ -146,7 +150,7 @@ pygalgitm_object.print_component("sersic")
 
 print("------------------------------------")
 print("Running GALFITM...")
-pygalgitm_object.write_feedme()
+#pygalgitm_object.write_feedme()
 _ = pygalgitm_object.run()
 
 filters = pygalgitm_object.base['A1']['value'].split(",") 
@@ -220,8 +224,8 @@ aresidual_data = {f: open_file(join(OUTPUT_FOLDER, f"residual_{f}.png")) for i, 
 
 fig, axs = plt.subplots(3, 12, figsize=(20, 5))  # Create 3x12 subplots
 
-# Plotting images from dict1
-for i, (key, value) in enumerate(ainput_data.items()):
+# Plotting images from dict3
+for i, (key, value) in enumerate(aresidual_data.items()):
     axs[0, i].imshow(value, cmap='gray')
     axs[0, i].axis('off')
 
@@ -230,8 +234,8 @@ for i, (key, value) in enumerate(amodel_data.items()):
     axs[1, i].imshow(value, cmap='gray')
     axs[1, i].axis('off')
 
-# Plotting images from dict3
-for i, (key, value) in enumerate(aresidual_data.items()):
+# Plotting images from dict1
+for i, (key, value) in enumerate(ainput_data.items()):
     axs[2, i].imshow(value, cmap='gray')
     axs[2, i].axis('off')
 
