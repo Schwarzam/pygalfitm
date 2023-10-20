@@ -61,7 +61,11 @@ def get_splus_class(name, ra, dec, cut_size, data_folder, output_folder, conn, r
     for band in bands:
         band = band.lower()
         try:
-            f = conn.get_cut(ra, dec, cut_size, band.replace("j0", "f").upper())
+            try:
+                f = conn.stamp(ra, dec, cut_size, band.replace("j0", "f").upper()) ## New splusdata API splusdata>=3.92
+            except:
+                f = conn.get_cut(ra, dec, cut_size, band.replace("j0", "f").upper())
+                
             unpacked = fits.hdu.image.PrimaryHDU(data = f[1].data, header = f[1].header)
             if remove_negatives:
                 unpacked.data = unpacked.data.clip(min=0)
