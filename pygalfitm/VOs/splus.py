@@ -11,23 +11,35 @@ import numpy as np
 import os
 
 
-def get_splus_class(name, ra, dec, cut_size, data_folder, output_folder, conn, remove_negatives=True, bands = ["I", "R", "G"], zpfile = None,
-    SPLUS_WAVELENGHTS = {
-            "i": 7670.59, 
-            "r": 6251.83, 
-            "g": 4758.49, 
-            "z": 8936.64,
-            "u": 3533.29, 
-            "J0378": 3773.13, 
-            "J0395": 3940.70, 
-            "J0410": 4095.27, 
-            "J0430": 4292.39,
-            "J0515": 5133.15,
-            "J0660": 6613.88,
-            "J0861": 8607.59
-    }, 
-    conv_box_const = 60,
-    **kwargs):
+def get_splus_class(
+    name,
+    ra,
+    dec,
+    cut_size,
+    data_folder,
+    output_folder,
+    conn,
+    use_sigma=False,
+    remove_negatives=True,
+    bands=["I", "R", "G"],
+    zpfile=None,
+    SPLUS_WAVELENGHTS={
+        "i": 7670.59,
+        "r": 6251.83,
+        "g": 4758.49,
+        "z": 8936.64,
+        "u": 3533.29,
+        "J0378": 3773.13,
+        "J0395": 3940.70,
+        "J0410": 4095.27,
+        "J0430": 4292.39,
+        "J0515": 5133.15,
+        "J0660": 6613.88,
+        "J0861": 8607.59,
+    },
+    conv_box_const=60,
+    **kwargs,
+    ):
     """Function to get splus data and process it with galfitm
     You may copy this code and adapt it to your needs
 
@@ -62,15 +74,33 @@ def get_splus_class(name, ra, dec, cut_size, data_folder, output_folder, conn, r
         band = band.lower()
         try:
             try:
-                f = conn.stamp(ra, dec, cut_size, band.replace("j0", "f").upper()) ## New splusdata API splusdata>=3.92
+                hdus = conn.stamp(ra, dec, cut_size, band.replace("j0", "f").upper()) ## New splusdata API splusdata>=3.92
+                if use_sigma:
+                    weight_hdus = conn.stamp(ra, dec, cut_size, band.replace("j0", "f").upper(), weight=True)
             except:
-                f = conn.get_cut(ra, dec, cut_size, band.replace("j0", "f").upper())
+                print("Please update your splusdata to >=3.93")
+                hdus = conn.get_cut(ra, dec, cut_size, band.replace("j0", "f").upper())
+                if use_sigma:
+                    weight_hdus = conn.get_cut_weight(ra, dec, cut_size, band.replace("j0", "f").upper())
+            
+            def write_fits_content_firsthdu(f, filename):
+                ## This is needed because splus API provides fpacked compressed images,
+                ## and pygalfitm does not support them, so we unpack them here
+                unpacked = fits.hdu.image.PrimaryHDU(data = f[1].data, header = f[1].header)
+                if remove_negatives:
+                    unpacked.data = unpacked.data.clip(min=0)
+                fits.hdu.hdulist.HDUList(hdus=[unpacked]).writeto(filename, overwrite=True)    
+            
+            write_fits_content_firsthdu(
+                hdus, 
+                os.path.join(data_folder, f'{name}_{band.lower()}.fits')
+            )
+            if use_sigma:
+                write_fits_content_firsthdu(
+                    weight_hdus, 
+                    os.path.join(data_folder, f'{name}_{band.lower()}_weight.fits')
+                )
                 
-            unpacked = fits.hdu.image.PrimaryHDU(data = f[1].data, header = f[1].header)
-            if remove_negatives:
-                unpacked.data = unpacked.data.clip(min=0)
-            fits.hdu.hdulist.HDUList(hdus=[unpacked]).writeto(os.path.join(data_folder, f'{name}_{band.lower()}.fits'), overwrite=True)    
-        
         except Exception as e:
             print(e)
         
