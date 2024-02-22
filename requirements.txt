@@ -1,5 +1,6 @@
-astropy==5.1.1
-pandas==1.5.1
-numpy==1.21.5
-requests==2.28.2
-matplotlib==3.7.1
+astropy==6.0.0
+pandas==2.2.0
+numpy==1.23.3
+requests==2.31.0
+matplotlib==3.8.3
+splusdata==4.0

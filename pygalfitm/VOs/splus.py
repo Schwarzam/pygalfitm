@@ -77,8 +77,8 @@ def get_splus_class(
                 hdus = conn.stamp(ra, dec, cut_size, band.replace("j0", "f").upper()) ## New splusdata API splusdata>=3.92
                 if use_sigma:
                     weight_hdus = conn.stamp(ra, dec, cut_size, band.replace("j0", "f").upper(), weight=True)
-            except:
-                print("Please update your splusdata to >=3.93")
+            except Exception as e:
+                print("Please update your splusdata to >=4.0 and use splusdata.Core instead of splusdata.connect")
                 hdus = conn.get_cut(ra, dec, cut_size, band.replace("j0", "f").upper())
                 if use_sigma:
                     weight_hdus = conn.get_cut_weight(ra, dec, cut_size, band.replace("j0", "f").upper())
