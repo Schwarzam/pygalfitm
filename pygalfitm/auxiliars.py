@@ -119,7 +119,7 @@ def find_nearest_object(table, ra, dec, ra_name = "ra", dec_name = "dec") :
         Series representing the nearest object in the table.
     """
     target_coord = SkyCoord(ra=ra*u.degree, dec=dec*u.degree)
-    table_coords = SkyCoord(ra=table[ra_name]*u.degree, dec=table[dec_name]*u.degree)
+    table_coords = SkyCoord(ra=table[ra_name]*u.degree, dec=table[dec_name]*u.degree, unit = (u.degree, u.degree))
     idx, sep, _ = target_coord.match_to_catalog_sky(table_coords)
     nearest_object = table.iloc[idx]
     return nearest_object
