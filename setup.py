@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
      name='pygalfitm',
-     version='1.1',
+     version='1.2',
      packages = setuptools.find_packages(),
      author="Gustavo Schwarz",
      author_email="gustavo.b.schwarz@gmail.com",

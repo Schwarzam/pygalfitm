@@ -67,7 +67,6 @@ def gen_plot(pygalfit: object, component_selected: str = "sersic", plot_paramete
     y_label = ["INPUT", "MODEL", "RESIDUAL"]
     y_label_index = 0
 
-    actual_filter = ""
     for i in range(1, n_filters * 3 + 1):
         ax = fig.add_subplot(3, n_filters, i)
         im_data = make_lupton_rgb(fits_cube[i].data, fits_cube[i].data, fits_cube[i].data, stretch=lupton_stretch, Q=lupton_q)

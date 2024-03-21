@@ -12,6 +12,8 @@ import pygalfitm
 from pygalfitm.plot import gen_plot, gen_color_plot
 from pygalfitm.auxiliars import remove_parentheses_and_brackets
 
+from pygalfitm.log import control
+
 class PyGalfitm:
     """PyGalfitM wrapper class. 
     """    
@@ -180,7 +182,7 @@ class PyGalfitm:
 
     def check_executable(self):
         if not os.path.exists(self.executable):
-            print("Executable path not found. ")
+            control.info("Executable path not found. ")
             while True:
                 i = input("Do you want to download the executable? (y/n): ")
                 if i == "y":
@@ -189,16 +191,16 @@ class PyGalfitm:
                     return
             
             if sys.platform == "darwin":
-                print("Downloading galfitm executable from " + "https://www.nottingham.ac.uk/astronomy/megamorph/exec/galfitm-1.4.4-osx")
+                control.info("Downloading galfitm executable from " + "https://www.nottingham.ac.uk/astronomy/megamorph/exec/galfitm-1.4.4-osx")
                 r = requests.get("https://www.nottingham.ac.uk/astronomy/megamorph/exec/galfitm-1.4.4-osx")
                 open(os.path.join(pygalfitm.__path__[0], "galfitm"), "wb").write(r.content)
             
             if sys.platform == "linux":
-                print("Downloading galfitm executable from " + "https://www.nottingham.ac.uk/astronomy/megamorph/exec/galfitm-1.4.4-linux-x86_64")
+                control.info("Downloading galfitm executable from " + "https://www.nottingham.ac.uk/astronomy/megamorph/exec/galfitm-1.4.4-linux-x86_64")
                 r = requests.get("https://www.nottingham.ac.uk/astronomy/megamorph/exec/galfitm-1.4.4-linux-x86_64")
                 open(os.path.join(pygalfitm.__path__[0], "galfitm"), "wb").write(r.content)
                 
-            print(f"""PLEASE RUN:
+            control.warn(f"""PLEASE RUN:
                 chmod +x {os.path.join(pygalfitm.__path__[0], "galfitm")}
             """)
 
@@ -232,7 +234,7 @@ class PyGalfitm:
                     else:
                         self.active_components.append(str(comp) + str(count))
                         self.components_config[str(comp) + str(count)] = copy.deepcopy(self.components_config[str(comp)])
-                        print("Added component as " + str(comp) + str(count))
+                        control.info("Added component as " + str(comp) + str(count))
                 else:
                     raise Exception(f"Not valid component - {comp}")
         else:
@@ -404,11 +406,11 @@ class PyGalfitm:
                     continue
                 degrees = int(self.components_config[component][att]["col2"].split(",")[0])
                 if length > 1 and length < degrees:
-                    print("Higher degrees of freedom than params in component: " + component + " - (" + att + ")")
+                    control.info("Higher degrees of freedom than params in component: " + component + " - (" + att + ")")
                     correct = False
 
                 if length > 1 and length != nbands:
-                    print("Number of parameters incorrect in component: " + component + " - (" + att + ")")
+                    control.info("Number of parameters incorrect in component: " + component + " - (" + att + ")")
                     correct = False
         
 
@@ -424,14 +426,14 @@ class PyGalfitm:
         import subprocess
 
         if not self.check_number_of_filters():
-            print("Warning! Running with possibly wrong parameters on components.")
+            control.info("Warning! Running with possibly wrong parameters on components.")
 
         self.check_executable()
         try:
             output = subprocess.check_output(f'{self.executable} {self.feedme_path}', shell=True).decode("UTF-8")
         except subprocess.CalledProcessError as e:
             output = e.output.decode("UTF-8")
-            print(output)
+            control.info(output)
             raise Exception("Error running galfitm.")
 
         return output
@@ -585,4 +587,4 @@ class PyGalfitm:
                     cube[key] = fits.BinTableHDU(data=table, name=cube[key].name)
                 cube.flush()
             else:
-                print("Cube not compatible, different number of hdus and bands to save.")
+                control.info("Cube not compatible, different number of hdus and bands to save.")

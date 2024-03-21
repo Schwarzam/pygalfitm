@@ -6,10 +6,13 @@ from pygalfitm import PyGalfitm
 from pygalfitm.auxiliars import string_times_x, get_dims, get_exptime, unpack_file, check_vo_file, find_nearest_object
 from pygalfitm.psf import make_psf
 
+from pygalfitm.VOs.utils import write_fits_content_firsthdu, create_sigma_image, create_rms_image
+
 import pandas as pd
 import numpy as np
 import os
 
+from pygalfitm.log import control
 
 def get_splus_class(
     name,
@@ -64,6 +67,8 @@ def get_splus_class(
     wavelenghts = ""
     input_images = ""
     psf_images = ""
+    sigma_images = ""
+    rms_images = ""
     filters = ""
     zps = ""
 
@@ -78,31 +83,30 @@ def get_splus_class(
                 if use_sigma:
                     weight_hdus = conn.stamp(ra, dec, cut_size, band.replace("j0", "f").upper(), weight=True)
             except Exception as e:
-                print("Please update your splusdata to >=4.0 and use splusdata.Core instead of splusdata.connect")
+                control.warn("Please update your splusdata to >=4.0 and use splusdata.Core instead of splusdata.connect")
                 hdus = conn.get_cut(ra, dec, cut_size, band.replace("j0", "f").upper())
                 if use_sigma:
-                    weight_hdus = conn.get_cut_weight(ra, dec, cut_size, band.replace("j0", "f").upper())
-            
-            def write_fits_content_firsthdu(f, filename):
-                ## This is needed because splus API provides fpacked compressed images,
-                ## and pygalfitm does not support them, so we unpack them here
-                unpacked = fits.hdu.image.PrimaryHDU(data = f[1].data, header = f[1].header)
-                if remove_negatives:
-                    unpacked.data = unpacked.data.clip(min=0)
-                fits.hdu.hdulist.HDUList(hdus=[unpacked]).writeto(filename, overwrite=True)    
+                    weight_hdus = conn.get_cut_weight(ra, dec, cut_size, band.replace("j0", "f").upper())  
             
             write_fits_content_firsthdu(
                 hdus, 
-                os.path.join(data_folder, f'{name}_{band.lower()}.fits')
+                os.path.join(data_folder, f'{name}_{band.lower()}.fits'), 
+                remove_negatives
             )
             if use_sigma:
                 write_fits_content_firsthdu(
                     weight_hdus, 
-                    os.path.join(data_folder, f'{name}_{band.lower()}_weight.fits')
+                    os.path.join(data_folder, f'{name}_{band.lower()}_weight.fits'),
+                    remove_negatives
                 )
                 
+                create_sigma_image(weight_hdus[1].data, hdus[1].data, os.path.join(data_folder, f'{name}_{band.lower()}_sigma.fits'))
+                create_rms_image(weight_hdus[1].data, os.path.join(data_folder, f'{name}_{band.lower()}_rms.fits'))
+                
         except Exception as e:
-            print(e)
+            raise Exception(e)
+            control.critical(e)
+            control.warn(f"Could not download {band} {name} band image")
         
         make_psf(os.path.join(data_folder, f'{name}_{band.lower()}.fits'), outfile=os.path.join(data_folder, f'psf_{name}_{band.lower()}.fits'))
         
@@ -111,6 +115,10 @@ def get_splus_class(
         psf_images += "," + os.path.join(data_folder, f'psf_{name}_{band.lower()}.fits')
         filters += "," + str(band).lower()
         wavelenghts += "," + str(SPLUS_WAVELENGHTS[band.lower().lower().replace("f", "J0").replace("j0", "J0")])
+        
+        if use_sigma:
+            sigma_images += "," + os.path.join(data_folder, f'{name}_{band.lower()}_sigma.fits')
+            rms_images += "," + os.path.join(data_folder, f'{name}_{band.lower()}_rms.fits')
         
         im_header = getheader(im_name)
         for key in im_header:
@@ -124,6 +132,10 @@ def get_splus_class(
     psf_images = psf_images[1:]
     filters = filters[1:]    
     wavelenghts = wavelenghts[1:]
+    
+    if use_sigma:
+        sigma_images = sigma_images[1:]
+        rms_images = rms_images[1:]
 
     ## Get ZPs
     check_vo_file("VOs/splusZPs.csv", "https://splus.cloud/files/documentation/iDR4/tabelas/iDR4_zero-points.csv") ## Check if zps file exists
@@ -175,7 +187,7 @@ def get_splus_class(
         "A": input_images,
         "A1": filters,
         "B": os.path.join(output_folder, name + "ss.fits"),
-        "C": "none",
+        "C": sigma_images if use_sigma else "none",
         "D": psf_images,
         "A2": wavelenghts,
         "H": f"1   {cut_size}  1   {cut_size}",
