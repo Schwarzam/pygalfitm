@@ -79,6 +79,10 @@ def read_output_to_class(filename):
         pyg = PyGalfitm()
         pyg.name = os.path.basename(name)
         pyg.base = base
-        pyg.components_config = components
+        
+        for comp in components.keys():
+            pyg.components_config[comp] = components[comp]
+        
+        pyg.activate_components(list(components.keys()))
 
     return pyg
