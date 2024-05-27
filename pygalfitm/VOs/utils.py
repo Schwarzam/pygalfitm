@@ -61,7 +61,7 @@ def create_sigma_image(weight_data, fits_data, out_filename):
     IM = vector_onlypos(fits_data)
     
     # Calculate Sigma and save to new FITS files
-    SIGMA = np.sqrt(np.square(RMS) + np.square(IM))
+    SIGMA = np.sqrt(np.square(RMS) + IM)
     hdu_sigma = fits.PrimaryHDU(SIGMA)
     hdu_sigma.writeto(out_filename, overwrite=True)
     return out_filename
