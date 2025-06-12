@@ -48,7 +48,9 @@ class PyGalfitm:
             "K": {"value": "0.55  0.55", "comment": "Plate scale (dx dy)   [arcsec per pixel]"},
             "O": {"value": "regular", "comment": "Display type (regular, curses, both)"}, 
             "P": {"value": "0", "comment": "Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps"}, 
-            "U": {"value": "0", "comment": ""}
+            "U": {"value": "0", "comment": ""},
+            "V": {"value": "0", "comment": "Use standard optimizer (0) or MultiNest (1)"},
+            "W": {"value": "default", "comment": "Output images"}
         }
 
         self.components_config = {
