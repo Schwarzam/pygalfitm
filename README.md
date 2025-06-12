@@ -1,39 +1,62 @@
 # pygalfitm
 
-Pygalfitm is a Python package that provides an interface to run the GALFITM software, a widely used tool in astrophysics for fitting 2D surface brightness distributions of galaxies. Pygalfitm simplifies the process of preparing input files, running GALFITM, and post-processing the output results.
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15648590.svg)](https://doi.org/10.5281/zenodo.15648590)
 
-Pygalfitm is built on top of the Python subprocess module, which allows for easy integration with other Python packages, such as Numpy and Matplotlib. It provides a set of classes and functions to define the GALFITM input parameters and run the fitting process, as well as a set of utilities to visualize the results.
+**Pygalfitm** is a Python package that provides an interface to run the GALFITM software, a widely used tool in astrophysics for fitting 2D surface brightness distributions of galaxies. Pygalfitm simplifies the process of preparing input files, executing GALFITM, and post-processing the output results.
 
-The Pygalfitm class provides an easy-to-use interface to interact with the GALFITM software. It includes functions to activate and set component parameters, write the input files, and run GALFITM. Additionally, it provides a function to generate plots to visualize the input, model, and residual data of the fitted galaxy.
+The package is built on top of Python’s `subprocess` module and integrates easily with libraries such as NumPy and Matplotlib. It includes tools to define GALFITM input parameters, run the fitting process, and generate visualizations of the input, model, and residual images.
 
-Pygalfitm can be installed using pip:
+## Installation
 
-### Examples
+Using pip:
 
-A good example of how it works is inside **example.ipynb** and **example-splus** notebook.
-
-There is also a folder with some usefull scripts inside dev/scripts (working with tables and so on...)
-
-```
+```bash
 pip3 install pygalfitm
-```
+````
 
-#### OR
+Or from source:
 
 ```
 python3 setup.py build
-
 python3 setup.py install
 ```
 
-#### Check out GALFITM page
+## Examples
 
+Usage examples are provided in:
+	•	example.ipynb – basic usage example
+	•	example-splus.ipynb – application to S-PLUS data
+	•	dev/scripts/ – utility scripts for working with tables and batch processing
+
+## Citation
+
+If you use pygalfitm in your work, citation is optional but appreciated. You may cite it as:
+
+@software{pygalfitm_software,
+  author       = {Oliveira Schwarz, G. B. and
+                  Cortesi, A. and
+                  Okiyama, L.},
+  title        = {pygalfitm},
+  month        = feb,
+  year         = 2023,
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.15648590},
+  url          = {https://doi.org/10.5281/zenodo.15648590}
+}
+
+Please also cite the original GALFITM software if you use this interface:
+
+Bamford, S. P., Häußler, B., Rojas, A. L., Borch, A., et al. (2011).
+MegaMorph: multi-wavelength measurement of galaxy structure with GALFITM.
+MNRAS, 427, 138.
+
+GALFITM is developed by the MegaMorph project. For more information, visit:
 https://www.nottingham.ac.uk/astronomy/megamorph/
 
-#### Contributing
+## License
 
-Contributions are welcome and greatly appreciated.
+This project is licensed under the MIT License.
 
-#### LICENSE 
+## Contributing
 
-Pygalfitm is distributed under the MIT License.
+Contributions are welcome and appreciated.
