@@ -32,6 +32,7 @@ Usage examples are provided in:
 
 If you use pygalfitm in your work, citation is optional but appreciated. You may cite it as:
 
+```bibtex
 @software{pygalfitm_software,
   author       = {Oliveira Schwarz, G. B. and
                   Cortesi, A. and
@@ -43,6 +44,7 @@ If you use pygalfitm in your work, citation is optional but appreciated. You may
   doi          = {10.5281/zenodo.15648590},
   url          = {https://doi.org/10.5281/zenodo.15648590}
 }
+```
 
 Please also cite the original GALFITM software if you use this interface:
 
