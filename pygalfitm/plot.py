@@ -2,6 +2,7 @@ from astropy.io import fits
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
+import numpy as np
 from typing import List, Tuple
 
 from astropy.visualization import make_lupton_rgb
@@ -14,8 +15,8 @@ def get_bands(bands):
     return r, g, b 
 
 def gen_plot(pygalfit: object, component_selected: str = "sersic", plot_parameters: List[str] = [],
-             plotsize_factor: Tuple[float, float] = (1, 1), colorbar: bool = True, lupton_stretch: float = 0.2, 
-             lupton_q: int = 8, fig_filename: str = None, return_plot: bool = False):
+            plotsize_factor: Tuple[float, float] = (1, 1), colorbar: bool = True, lupton_stretch: float = 0.2, 
+            lupton_q: int = 8, fig_filename: str = None, return_plot: bool = False, vminmax_percentiles: List[float] = None):
     
     """
         Generate a plot to visualize the input, model, and residual data of a PyGalfit model.
@@ -30,6 +31,7 @@ def gen_plot(pygalfit: object, component_selected: str = "sersic", plot_paramete
             - lupton_q (int): an integer specifying the Q factor used for the Lupton RGB image (default is 8).
             - fig_filename (str): a string specifying the filename to save the plot to (default is None).
             - return_plot (bool): a boolean indicating whether to return the plot object instead of showing it (default is False).
+            - vminmax_percentiles (List[float]): a list with two values [vmin_percentile, vmax_percentile] to set display range (default is None) (If used lupton is disabled!!).
             
         Returns:
             - fig (plt.Figure): the matplotlib Figure object, only if `return_plot` is True.
@@ -69,8 +71,19 @@ def gen_plot(pygalfit: object, component_selected: str = "sersic", plot_paramete
 
     for i in range(1, n_filters * 3 + 1):
         ax = fig.add_subplot(3, n_filters, i)
-        im_data = make_lupton_rgb(fits_cube[i].data, fits_cube[i].data, fits_cube[i].data, stretch=lupton_stretch, Q=lupton_q)
-        im = ax.imshow(im_data, cmap='gray', interpolation='none')
+        
+        # Get the original data
+        data = fits_cube[i].data
+        
+        # Apply vmin/vmax scaling if percentiles are provided
+        if vminmax_percentiles is not None:
+            vmin = np.percentile(data, vminmax_percentiles[0])
+            vmax = np.percentile(data, vminmax_percentiles[1])
+            im = ax.imshow(data, cmap='gray', interpolation='none', vmin=vmin, vmax=vmax)
+        else:
+            # Use Lupton stretch only when no percentile scaling is specified
+            im_data = make_lupton_rgb(data, data, data, stretch=lupton_stretch, Q=lupton_q)
+            im = ax.imshow(im_data, cmap='gray', interpolation='none')
         
         ax.set_xticks([])
         ax.set_yticks([])
