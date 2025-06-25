@@ -20,14 +20,18 @@ def create_rms(x):
     else:
         return 0
 
-def write_fits_content_firsthdu(f, filename, remove_negatives=True):
+def write_fits_content_firsthdu(f, filename, remove_negatives='auto'):
     """
     Write the content of the first HDU of a FITS file to a new file.
 
     Parameters:
     - f: `astropy.io.fits.HDUList` object representing the FITS file.
     - filename: Name of the output file to write the content to.
-    - remove_negatives: Boolean indicating whether to remove negative values from the data. Default is True.
+    - remove_negatives: Boolean or string indicating how to handle negative values.
+                       - True: clip negative values to 0.01
+                       - False: keep negative values as they are
+                       - 'auto': add a constant only to negative pixels to make the minimum negative value equal to 0.01
+                       Default is True.
 
     Returns:
     None
@@ -35,8 +39,18 @@ def write_fits_content_firsthdu(f, filename, remove_negatives=True):
     ## This is needed because splus API provides fpacked compressed images,
     ## and pygalfitm does not support them, so we unpack them here
     unpacked = fits.hdu.image.PrimaryHDU(data=f[1].data, header=f[1].header)
-    if remove_negatives:
-        unpacked.data = unpacked.data.clip(min=0)
+    
+    if remove_negatives == 'auto':
+        min_value = unpacked.data.min()
+        if min_value < 0:
+            constant = 0.01 - min_value
+            # Apply the constant only to negative pixels
+            negative_mask = unpacked.data < 0
+            unpacked.data[negative_mask] = unpacked.data[negative_mask] + constant
+    elif remove_negatives:
+        # Original behavior: clip negative values to 0.01
+        unpacked.data = unpacked.data.clip(min=0.01)
+
     fits.hdu.hdulist.HDUList(hdus=[unpacked]).writeto(filename, overwrite=True)
 
 
