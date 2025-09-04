@@ -41,6 +41,7 @@ def get_splus_class(
         "J0861": 8607.59,
     },
     conv_box_const=60,
+    data_release="dr4",
     **kwargs,
     ):
     """Function to get splus data and process it with galfitm
@@ -79,9 +80,9 @@ def get_splus_class(
         band = band.lower()
         try:
             try:
-                hdus = conn.stamp(ra, dec, cut_size, band.replace("j0", "f").upper()) ## New splusdata API splusdata>=3.92
+                hdus = conn.stamp(ra, dec, cut_size, band.replace("j0", "f").upper(), data_release=data_release) ## New splusdata API splusdata>=3.92
                 if use_sigma:
-                    weight_hdus = conn.stamp(ra, dec, cut_size, band.replace("j0", "f").upper(), weight=True)
+                    weight_hdus = conn.stamp(ra, dec, cut_size, band.replace("j0", "f").upper(), weight=True, data_release=data_release)
             except Exception as e:
                 control.warn("Please update your splusdata to >=4.0 and use splusdata.Core instead of splusdata.connect")
                 hdus = conn.get_cut(ra, dec, cut_size, band.replace("j0", "f").upper())
