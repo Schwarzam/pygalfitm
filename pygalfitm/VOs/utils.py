@@ -30,7 +30,7 @@ def write_fits_content_firsthdu(f, filename, remove_negatives='auto'):
     - remove_negatives: Boolean or string indicating how to handle negative values.
                        - True: clip negative values to 0.01
                        - False: keep negative values as they are
-                       - 'auto': add a constant only to negative pixels to make the minimum negative value equal to 0.01
+                       - 'auto': add a constant to all pixels to make the minimum negative value equal to 0.01
                        Default is True.
 
     Returns:
@@ -45,9 +45,7 @@ def write_fits_content_firsthdu(f, filename, remove_negatives='auto'):
         min_value = unpacked.data.min()
         if min_value < 0:
             constant = 0.01 - min_value
-            # Apply the constant only to negative pixels
-            negative_mask = unpacked.data < 0
-            unpacked.data[negative_mask] = unpacked.data[negative_mask] + constant
+            unpacked.data = unpacked.data + constant
 
     elif remove_negatives:
         # Original behavior: clip negative values to 0.01
