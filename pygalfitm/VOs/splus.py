@@ -88,13 +88,13 @@ def get_splus_class(
                 if use_sigma:
                     weight_hdus = conn.get_cut_weight(ra, dec, cut_size, band.replace("j0", "f").upper())  
             
-            write_fits_content_firsthdu(
+            constant = write_fits_content_firsthdu(
                 hdus, 
                 os.path.join(data_folder, f'{name}_{band.lower()}.fits'), 
                 remove_negatives
             )
             if use_sigma:
-                write_fits_content_firsthdu(
+                constant = write_fits_content_firsthdu(
                     weight_hdus, 
                     os.path.join(data_folder, f'{name}_{band.lower()}_weight.fits'),
                     remove_negatives

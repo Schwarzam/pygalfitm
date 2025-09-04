@@ -39,6 +39,7 @@ def write_fits_content_firsthdu(f, filename, remove_negatives='auto'):
     ## This is needed because splus API provides fpacked compressed images,
     ## and pygalfitm does not support them, so we unpack them here
     unpacked = fits.hdu.image.PrimaryHDU(data=f[1].data, header=f[1].header)
+    constant = None
     
     if remove_negatives == 'auto':
         min_value = unpacked.data.min()
@@ -47,12 +48,13 @@ def write_fits_content_firsthdu(f, filename, remove_negatives='auto'):
             # Apply the constant only to negative pixels
             negative_mask = unpacked.data < 0
             unpacked.data[negative_mask] = unpacked.data[negative_mask] + constant
+
     elif remove_negatives:
         # Original behavior: clip negative values to 0.01
         unpacked.data = unpacked.data.clip(min=0.01)
 
     fits.hdu.hdulist.HDUList(hdus=[unpacked]).writeto(filename, overwrite=True)
-
+    return constant
 
 def create_sigma_image(weight_data, fits_data, out_filename):
     """
