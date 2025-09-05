@@ -79,21 +79,16 @@ def get_splus_class(
     for band in bands:
         band = band.lower()
         try:
-            try:
-                hdus = conn.stamp(ra, dec, cut_size, band.replace("j0", "f").upper(), data_release=data_release) ## New splusdata API splusdata>=3.92
-                if use_sigma:
-                    weight_hdus = conn.stamp(ra, dec, cut_size, band.replace("j0", "f").upper(), weight=True, data_release=data_release)
-            except Exception as e:
-                control.warn("Please update your splusdata to >=4.0 and use splusdata.Core instead of splusdata.connect")
-                hdus = conn.get_cut(ra, dec, cut_size, band.replace("j0", "f").upper())
-                if use_sigma:
-                    weight_hdus = conn.get_cut_weight(ra, dec, cut_size, band.replace("j0", "f").upper())  
-            
+            hdus = conn.stamp(ra, dec, cut_size, band.replace("j0", "f").upper(), data_release=data_release) ## New splusdata API splusdata>=3.92
+            if use_sigma:
+                weight_hdus = conn.stamp(ra, dec, cut_size, band.replace("j0", "f").upper(), weight=True, data_release=data_release)
+        
             constant = write_fits_content_firsthdu(
                 hdus, 
                 os.path.join(data_folder, f'{name}_{band.lower()}.fits'), 
                 remove_negatives
             )
+            print(f"Constant added to {name}_{band.lower()}.fits: {constant}")
             if use_sigma:
                 constant = write_fits_content_firsthdu(
                     weight_hdus, 
@@ -165,7 +160,7 @@ def get_splus_class(
             CIRCLE('ICRS', {ra}, {dec}, 0.0015))
         """)
 
-        obj = find_nearest_object(table.to_pandas(), ra, dec, ra_name=f"RA_{band}", dec_name=f"DEC_{band}")
+        obj = find_nearest_object(table, ra, dec, ra_name=f"RA_{band}", dec_name=f"DEC_{band}")
         
         axis_ratios += "," + str( obj[f"B_{band}"]/obj[f"A_{band}"] )
         effective_rs += "," + str( obj[f"FLUX_RADIUS_50_{band}"] )

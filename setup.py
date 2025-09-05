@@ -2,13 +2,13 @@ import setuptools
 
 setuptools.setup(
      name='pygalfitm',
-     version='1.5',
+     version='1.52',
      packages = setuptools.find_packages(),
      author="Gustavo Schwarz",
      author_email="gustavo.b.schwarz@gmail.com",
      description="Python3 GalfitM wrapper",
      url="https://github.com/schwarzam/pygalfitm",
-     install_requires = ['astropy', 'pandas', 'numpy', 'requests', 'matplotlib'],
+     install_requires = ['astropy', 'pandas', 'numpy', 'requests', 'matplotlib', 'adss'],
      classifiers=[
          "Programming Language :: Python :: 3",
          "License :: OSI Approved :: Apache Software License"
