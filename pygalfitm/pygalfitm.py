@@ -327,6 +327,16 @@ class PyGalfitm:
                     self.components_config[component][item][column] = str(value)
         else:
             raise KeyError("Component not found.")
+        
+    def remove_component(self, component_name) -> None:
+        """Removes component from active components
+
+        Args:
+            component (str): component name
+            item (str): item to remove
+        """        
+        if component_name in self.active_components:
+            self.active_components.remove(component_name)
 
 
     def write_feedme(self, feedme_path = None):
