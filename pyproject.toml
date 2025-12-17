@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pygalfitm"
+version = "1.54"
+description = "Python3 GalfitM wrapper"
+readme = "README.md"
+requires-python = ">=3.7"
+license = { text = "Apache Software License" }
+
+authors = [
+  { name = "Gustavo Schwarz", email = "gustavo.b.schwarz@gmail.com" }
+]
+
+dependencies = [
+  "astropy",
+  "pandas",
+  "numpy",
+  "requests",
+  "matplotlib",
+  "adss"
+]
+
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: Apache Software License"
+]
+
+[project.urls]
+Homepage = "https://github.com/schwarzam/pygalfitm"
+Repository = "https://github.com/schwarzam/pygalfitm"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pygalfitm*"]
+
+# pip install build twine
+# python -m build
+# python -m twine upload dist/*

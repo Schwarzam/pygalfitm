@@ -190,4 +190,4 @@ def gen_color_plot(pygalfit, band_combinations=["i,r,g", "u,f378,f395"], lupton_
     if return_plot:
         return fig
     else:
-        plt.show()
+        plt.close()
